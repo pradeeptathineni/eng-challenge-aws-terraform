@@ -1,4 +1,4 @@
-# Terraform directory and saved plan location.
+# Terraform directory and saved plan location
 TF_DIR := terraform
 PLAN_FILE := tfplan
 

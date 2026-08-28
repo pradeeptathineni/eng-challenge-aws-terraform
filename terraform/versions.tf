@@ -1,6 +1,6 @@
 terraform {
   # Keep local development and CI on the same stable Terraform minor release
-  required_version = "~> 1.15.8"
+  required_version = "~> 1.16.0"
 
   required_providers {
     aws = {
