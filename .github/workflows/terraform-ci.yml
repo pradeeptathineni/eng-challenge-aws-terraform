@@ -1,0 +1,38 @@
+name: Engineering Challenge AWS Terraform CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+# Will need OIDC permissions later
+permissions:
+  contents: read
+  # id-token: write
+
+jobs:
+  terraform-static:
+    name: Terraform Static Checks
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v7
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v4
+        with:
+          # Keep CI aligned with the Terraform version used locally
+          terraform_version: 1.15.8
+
+      - name: Terraform Version
+        run: make version
+
+      - name: Terraform Format Check
+        run: make fmt-check
+
+      - name: Terraform Validate
+        # CI performs backend-disabled init; static validation
+        # Does not require access to Terraform state or AWS infrastructure
+        run: make validate-ci

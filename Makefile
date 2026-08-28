@@ -8,10 +8,10 @@ PLAN_FILE := tfplan
 
 help: ## Show available commands
 	@echo "AWS Terraform Engineering Challenge"
-	@echo ""
+	@echo
 	@echo "Usage:"
 	@echo "  make <target>"
-	@echo ""
+	@echo
 	@echo "Targets:"
 	@awk 'BEGIN {FS = ":.*## "}; /^[a-zA-Z_-]+:.*## / {printf "  %-12s %s\n", $$1, $$2}' $(MAKEFILE_LIST)
 
