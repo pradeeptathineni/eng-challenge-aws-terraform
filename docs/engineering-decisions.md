@@ -75,3 +75,27 @@ This document serves to tell this project's engineering story chronologically an
 
 1. **AWS login with aws-login.sh script**
     - Helps to log into AWS either through modern aws login or an already-configured SSO profile.
+
+1. **Commenting and formatting is standardized across all code**
+    - Increases clarity and visibility of semantics and decisions.
+
+1. **Not addressing dev/staging/prod environments without a true need**
+    - The challenge requires one deployment.
+    - Separate dev and prod configurations would add complexity without solving a current problem.
+    - Multiple environments can be added later without redesigning the Terraform modules.
+
+1. **Terraform locals for shared project values**
+    - Terraform locals hold values reused throughout the project.
+    - The project name, network ranges, availability zone count, and common tags are kept together.
+    - Later modules can use the same values without repeating them.
+    - Network definitions close together like this gives easy visibility.
+
+1. **Simple naming and tagging conventions**
+    - AWS resource names will use the project name followed by their purpose.
+        - `eng-challenge-aws-terraform-vpc`
+        - `eng-challenge-aws-terraform-alb`
+    - Resource names should stay obvious; no unnecessary abbreviations.
+    - Supported AWS resources automatically get default tags through the AWS provider resource.
+        - `Project` = `eng-challenge-aws-terraform`
+        - `ManagedBy` = `Terraform`
+    - Resource-specific `Name` tags will be added where resources are created.

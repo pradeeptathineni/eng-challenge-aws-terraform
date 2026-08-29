@@ -131,6 +131,10 @@ See [docs/engineering-decisions.md](docs/engineering-decisions.md)
 - [AWS CLI environment variable configuration](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-envvars.html)
 - [AWS CLI local development login](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-sign-in.html)
 - [AWS CLI IAM Identity Center authentication](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-sso.html)
+- [Terraform variables](https://developer.hashicorp.com/terraform/language/values/variables)
+- [Terraform locals](https://developer.hashicorp.com/terraform/language/values/locals)
+- [Terraform version constraints](https://developer.hashicorp.com/terraform/language/expressions/version-constraints)
+- [Terraform provider requirements](https://developer.hashicorp.com/terraform/language/providers/requirements)
 
 ### Influences
 

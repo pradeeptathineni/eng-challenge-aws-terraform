@@ -1,5 +1,10 @@
+# versions.tf - Define required Terraform and provider versions
+# Keeps local development and CI on compatible tool versions
+
+# References:
+# Terraform version constraints
+
 terraform {
-  # Keep local development and CI on the same stable Terraform minor release
   required_version = "~> 1.16.0"
 
   required_providers {
