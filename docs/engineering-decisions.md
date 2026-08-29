@@ -161,3 +161,10 @@ This document serves to tell this project's engineering story chronologically an
 1. **Allow EC2 outbound traffic**
    - &#11088; The EC2 security group should permit outbound traffic in consideration of web server workloads.
    - The private subnet still has no internet route though.
+
+1. **Makefile should minimize nesting**
+   - "Leaf" targets execute units of work.
+   - "Branch" targets are composed of leaves and, infrequently, other branches.
+   - Show an obvious separation between primitive/focused/helper commands and actual developer workflows.
+   - This makes usage more and extensibility more clear.
+   - Our CI configuration also benefits from less complexity.

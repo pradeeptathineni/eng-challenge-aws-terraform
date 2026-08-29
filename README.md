@@ -10,43 +10,49 @@ A simple AWS infrastructure challenge built with Terraform and developed step by
 
 > All resources are named using the `<prefix>`, defined by `resource_prefix` in [terraform/locals.tf](terraform/locals.tf).
 
-- **VPC**
-  - `<prefix>-vpc` &mdash; `10.0.0.0/16`
+### VPC
 
-- **Subnets**
-  - Two public subnets in different availability zones
-    - `<prefix>-subnet-public-1` &mdash; `10.0.1.0/24`
-    - `<prefix>-subnet-public-2` &mdash; `10.0.2.0/24`
-  - Two private subnets in different availability zones
-    - `<prefix>-subnet-private-1` &mdash; `10.0.30.0/24`
-    - `<prefix>-subnet-private-2` &mdash; `10.0.40.0/24`
+- `<prefix>-vpc` — `10.0.0.0/16`
 
-- **Application Load Balancer**
-  - Internet-facing
-  - Deployed across the public subnets
-  - Accepts HTTP on port `80`
-  - Accepts HTTPS on port `443`
-  - Terminates HTTPS using a self-signed certificate
-  - Forwards application traffic to the EC2 instance
+### Subnets
 
-- **EC2**
-  - One instance in a private subnet
-  - Runs a simple web server
-  - Receives application traffic from the load balancer
+- Two public subnets in different availability zones
+  - `<prefix>-subnet-public-1` — `10.0.1.0/24`
+  - `<prefix>-subnet-public-2` — `10.0.2.0/24`
+- Two private subnets in different availability zones
+  - `<prefix>-subnet-private-1` — `10.0.30.0/24`
+  - `<prefix>-subnet-private-2` — `10.0.40.0/24`
 
-- **Security groups**
-  - `<prefix>-sg-alb`
-    - inbound HTTP `80` from `0.0.0.0/0`
-    - inbound HTTPS `443` from `0.0.0.0/0`
-    - outbound HTTP `80` to `<prefix>-sg-ec2`
-  - `<prefix>-sg-ec2`
-    - inbound HTTP `80` from `<prefix>-sg-alb`
-    - inbound SSH `22` from `10.0.0.0/16`
-    - outbound traffic allowed
+### Application Load Balancer
 
-- **Terraform outputs**
-  - ALB DNS name
-  - EC2 private IP address
+- Internet-facing
+- Deployed across the public subnets
+- Accepts HTTP on port `80`
+- Accepts HTTPS on port `443`
+- Terminates HTTPS using a self-signed certificate
+- Forwards application traffic to the EC2 instance
+
+### EC2
+
+- One instance in a private subnet
+- Runs a simple web server
+- Receives application traffic from the load balancer
+
+### Security groups
+
+- `<prefix>-sg-alb`
+  - inbound HTTP `80` from `0.0.0.0/0`
+  - inbound HTTPS `443` from `0.0.0.0/0`
+  - outbound HTTP `80` to `<prefix>-sg-ec2`
+- `<prefix>-sg-ec2`
+  - inbound HTTP `80` from `<prefix>-sg-alb`
+  - inbound SSH `22` from `10.0.0.0/16`
+  - outbound traffic allowed
+
+### Terraform outputs
+
+- ALB DNS name
+- EC2 private IP address
 
 > See [DevOpsChallenge.pdf](DevOpsChallenge.pdf) for original architecture reference.
 
@@ -64,30 +70,35 @@ A simple AWS infrastructure challenge built with Terraform and developed step by
 
 ### Commands
 
-- `make help` &mdash; Show available commands
-- `make tools` &mdash; Check if local tools are installed and their versions
-- `make version` &mdash; Show the active Terraform version
-- `make login` &mdash; Log into AWS and verify the active identity
-- `make auth` &mdash; Verify AWS credentials and show the active AWS account
-- `make shell-validate` &mdash; Check Bash helper scripts for syntax errors
-- `make fmt` &mdash; Format all Terraform configuration
-- `make fmt-check` &mdash; Check Terraform formatting without changing files
-- `make init` &mdash; Initialize Terraform for local development
-- `make init-ci` &mdash; Initialize Terraform for CI without backend access
-- `make validate` &mdash; Initialize and validate Terraform configuration
-- `make validate-ci` &mdash; Initialize and validate Terraform configuration in CI
-- `make plan` &mdash; Check AWS identity and create a saved Terraform plan
-- `plan-show` &mdash; Show the saved Terraform plan
-- `make apply` &mdash; Check AWS identity and apply the saved Terraform plan
-- `make destroy` &mdash; Check AWS identity and destroy managed infrastructure
-- `make output` &mdash; Show Terraform outputs from the current state
-- `make state-list` &mdash; List resources currently tracked by Terraform state
-- `make state-show` &mdash; Show one resource from Terraform state using `RESOURCE=<address>`
-- `make clean` &mdash; Remove generated Terraform working files without deleting state
+> The Makefile provides higher-level developer workflows for robust execution and focused helper commands for individual operations.
+
+#### Workflows
+
+- `make login` — Log into AWS and verify the active identity
+- `make check` — Run shell syntax, Terraform formatting, and Terraform validation checks
+- `make plan` — Run project checks, verify AWS identity, initialize Terraform, and create a saved deployment plan
+- `make apply` — Verify AWS identity and apply the previously saved plan
+- `make destroy` — Verify AWS identity and destroy the managed infrastructure
+
+#### Helpers
+
+- `make help` — Show available commands
+- `make tools` — Check required local tools and show their versions
+- `make auth` — Verify AWS credentials and show the active identity
+- `make shell-validate` — Check Bash helper scripts for syntax errors
+- `make fmt` — Format all Terraform configuration
+- `make fmt-check` — Check Terraform formatting without changing files
+- `make init` — Initialize Terraform with the configured backend
+- `make validate` — Initialize without backend access and validate Terraform
+- `make plan-show` — Show the saved Terraform plan
+- `make output` — Show Terraform outputs from the current state
+- `make state-list` — List resources currently tracked by Terraform state
+- `make state-show` — Show one resource from Terraform state using `RESOURCE=<address>`
+- `make clean` — Remove generated Terraform working files without deleting state
 
 ### Running
 
-1. Configure your AWS CLI with the proper credentials if you haven't already.
+0. Configure your AWS CLI with the proper credentials using any of these methods if you haven't already.
 
    ```bash
    # IAM Identity Center / SSO
@@ -113,16 +124,26 @@ A simple AWS infrastructure challenge built with Terraform and developed step by
 
    ```bash
    make login
-   make auth
 
    # sanity check
    aws s3 ls
    ```
 
-1. Initialize, validate, plan, and apply the Terraform infrastructure.
+1. Run syntax, formatting, and validation checks on shell and Terraform code.
+
+   ```bash
+   make check
+   ```
+
+1. Initialize, validate, and plan the Terraform infrastructure.
 
    ```bash
    make plan
+   ```
+
+1. Apply the Terraform infrastructure.
+
+   ```bash
    make apply
    ```
 
@@ -134,15 +155,18 @@ A simple AWS infrastructure challenge built with Terraform and developed step by
 
 ### CI
 
-GitHub Actions runs automatically on pushes and pull requests and currently checks:
+> GitHub Actions runs automatically on pushes and pull requests to `main` using the same `make check` workflow available locally.
 
-- Terraform version
-- Bash syntax
+> Terraform `1.16.0` is installed explicitly in CI to keep automation aligned with local development.
+
+#### Current static checks include:
+
+- Bash helper script syntax
 - Terraform formatting
 - Terraform initialization without backend access
 - Terraform configuration validation
 
-GitHub Actions uses the same Make commands used locally.
+> CI does not currently require AWS credentials or access to deployed infrastructure or Terraform state.
 
 ---
 
