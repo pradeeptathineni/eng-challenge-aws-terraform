@@ -37,6 +37,9 @@ This document serves to supply all resources that went into developing this proj
 - [Terraform AWS provider security group](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/security_group)
 - [Terraform AWS provider security group ingress rule](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/vpc_security_group_ingress_rule)
 - [Terraform AWS provider security group egress rule](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/vpc_security_group_egress_rule)
+- [AWS Systems Manager public AMI parameters](https://docs.aws.amazon.com/systems-manager/latest/userguide/parameter-store-public-parameters-ami.html)
+- [Terraform AWS provider EC2 instance](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/instance)
+- [Amazon EC2 user data](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/user-data.html)
 
 ### Architecture Influences
 
