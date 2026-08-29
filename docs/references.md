@@ -47,6 +47,8 @@ This document serves to supply all resources that went into developing this proj
 - [AWS Application Load Balancer target groups](https://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-target-groups.html)
 - [AWS Application Load Balancer health checks](https://docs.aws.amazon.com/elasticloadbalancing/latest/application/target-group-health-checks.html)
 - [AWS Application Load Balancer security groups](https://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-update-security-groups.html)
+- [Terraform outputs](https://developer.hashicorp.com/terraform/language/values/outputs)
+- [Terraform output command](https://developer.hashicorp.com/terraform/cli/commands/output)
 
 ### Architecture Influences
 
