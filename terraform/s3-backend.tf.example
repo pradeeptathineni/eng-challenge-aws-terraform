@@ -1,0 +1,12 @@
+# s3-backend.tf.example - Optional S3 remote state backend
+# Copy to s3-backend.tf when remote state is enabled
+
+# References:
+# Terraform S3 backend
+
+terraform {
+  backend "s3" {
+    encrypt      = true
+    use_lockfile = true
+  }
+}

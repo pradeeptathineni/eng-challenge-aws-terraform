@@ -16,6 +16,21 @@ An AWS infrastructure challenge built with Terraform and developed step by step 
 
 ---
 
+## Configuration
+
+> Configurable deployment settings are centralized under [`config/`](config/).
+
+- [`config/project.tfvars`](config/project.tfvars) — settings shared by the main stack and optional state bootstrap
+  - Project identity
+  - Resource naming
+  - AWS region
+- [`config/stack.tfvars`](config/stack.tfvars) — main infrastructure settings
+  - VPC CIDR
+  - Subnet CIDRs
+  - EC2 web server instance type
+
+---
+
 ## Execution
 
 ### Requirements

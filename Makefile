@@ -7,22 +7,37 @@
 
 MAKEFLAGS += --no-print-directory
 
+CONFIG_DIR := config
 TF_DIR := terraform
+BOOTSTRAP_DIR := bootstrap
+
+PROJECT_CONFIG := $(CONFIG_DIR)/project.tfvars
+STACK_CONFIG := $(CONFIG_DIR)/stack.tfvars
+
+# Paths are relative to each Terraform root when using -chdir
+PROJECT_VARS := ../$(PROJECT_CONFIG)
+STACK_VARS := ../$(STACK_CONFIG)
+
 PLAN_FILE := tfplan
 PLAN_PATH := $(TF_DIR)/$(PLAN_FILE)
 
+BOOTSTRAP_PLAN_FILE := tfplan
+BOOTSTRAP_PLAN_PATH := $(BOOTSTRAP_DIR)/$(BOOTSTRAP_PLAN_FILE)
+
 TF := terraform -chdir=$(TF_DIR)
+BOOTSTRAP_TF := terraform -chdir=$(BOOTSTRAP_DIR)
 
 AWS_LOGIN_SCRIPT := scripts/aws-login.sh
 AWS_CONTEXT_SCRIPT := scripts/aws-context.sh
 VERIFY_SCRIPT := scripts/verify.sh
+BACKEND_SCRIPT := scripts/terraform-backend.sh
 
 .DEFAULT_GOAL := help
 
-.PHONY: help tools login auth shell-validate fmt fmt-check init validate check plan plan-show apply verify destroy output state-list state-show clean
+.PHONY: help tools login auth shell-validate fmt fmt-check init validate check plan plan-show apply verify destroy bootstrap-plan bootstrap-apply bootstrap-destroy state-local state-remote output state-list state-show clean
 
 
-##@ Workflows
+##@ Main Workflows
 
 login: ## Log into AWS and verify the active identity
 	@$(AWS_LOGIN_SCRIPT)
@@ -38,7 +53,11 @@ plan: ## Run checks verify AWS identity and create a saved Terraform plan
 	@$(MAKE) check
 	@$(MAKE) auth
 	@$(MAKE) init
-	@$(TF) plan -input=false -out=$(PLAN_FILE)
+	@$(TF) plan \
+		-input=false \
+		-var-file=$(PROJECT_VARS) \
+		-var-file=$(STACK_VARS) \
+		-out=$(PLAN_FILE)
 
 apply: ## Verify AWS identity and apply the saved Terraform plan
 	@test -f "$(PLAN_PATH)" || { \
@@ -53,7 +72,7 @@ apply: ## Verify AWS identity and apply the saved Terraform plan
 		rm -f $(PLAN_PATH); \
 		exit $$status
 
-verify: ## Verify the deployed application end to end
+verify: ## Verify the deployed application end-to-end
 	@$(MAKE) auth
 	@$(MAKE) init
 	@$(VERIFY_SCRIPT)
@@ -62,7 +81,50 @@ destroy: ## Verify AWS identity and destroy managed infrastructure
 	@rm -f $(PLAN_PATH)
 	@$(MAKE) auth
 	@$(MAKE) init
-	@$(TF) destroy
+	@$(TF) destroy \
+		-var-file=$(PROJECT_VARS) \
+		-var-file=$(STACK_VARS)
+
+
+##@ State Workflows
+
+bootstrap-plan: ## Create a saved plan for the remote state infrastructure
+	@rm -f $(BOOTSTRAP_PLAN_PATH)
+	@$(MAKE) check
+	@$(MAKE) auth
+	@$(BOOTSTRAP_TF) init -input=false
+	@$(BOOTSTRAP_TF) plan \
+		-input=false \
+		-var-file=$(PROJECT_VARS) \
+		-out=$(BOOTSTRAP_PLAN_FILE)
+
+bootstrap-apply: ## Apply the saved remote state infrastructure plan
+	@test -f "$(BOOTSTRAP_PLAN_PATH)" || { \
+		echo "ERROR: No saved bootstrap plan found"; \
+		echo "Run 'make bootstrap-plan' first"; \
+		exit 1; \
+	}
+	@$(MAKE) auth
+	@$(BOOTSTRAP_TF) init -input=false
+	@$(BOOTSTRAP_TF) apply -input=false $(BOOTSTRAP_PLAN_FILE); \
+		status=$$?; \
+		rm -f $(BOOTSTRAP_PLAN_PATH); \
+		exit $$status
+
+bootstrap-destroy: ## Assert manual destruction for S3 backend bucket
+	@echo
+	@echo "S3 backend is protected against programmatic destroy."
+	@echo "Manual destruction through console is the only option."
+	@echo
+
+state-local: ## Enable local state and migrate existing remote state when needed
+	@$(MAKE) auth
+	@$(BACKEND_SCRIPT) local
+
+state-remote: ## Enable S3 remote state and migrate existing state when needed
+	@$(MAKE) auth
+	@$(BACKEND_SCRIPT) remote
+
 
 
 ##@ Helpers
@@ -99,17 +161,23 @@ shell-validate: ## Check Bash helper scripts for syntax errors
 	done
 
 fmt: ## Format all Terraform configuration
-	@$(TF) fmt -recursive
+	@terraform fmt -recursive $(CONFIG_DIR)
+	@terraform fmt -recursive $(TF_DIR)
+	@terraform fmt -recursive $(BOOTSTRAP_DIR)
 
 fmt-check: ## Check Terraform formatting without changing files
-	@$(TF) fmt -check -recursive
+	@terraform fmt -check -recursive $(CONFIG_DIR)
+	@terraform fmt -check -recursive $(TF_DIR)
+	@terraform fmt -check -recursive $(BOOTSTRAP_DIR)
 
-init: ## Initialize Terraform with the configured backend
-	@$(TF) init -input=false
+init: ## Initialize the selected Terraform state backend
+	@$(BACKEND_SCRIPT) init
 
-validate: ## Initialize without backend access and validate Terraform
+validate: ## Validate all Terraform configuration without backend access
 	@$(TF) init -backend=false -input=false
 	@$(TF) validate
+	@$(BOOTSTRAP_TF) init -backend=false -input=false
+	@$(BOOTSTRAP_TF) validate
 
 plan-show: ## Show the saved Terraform plan
 	@test -f "$(PLAN_PATH)" || { \
@@ -134,6 +202,9 @@ state-show: ## Show one resource from Terraform state using RESOURCE=<address>
 
 clean: ## Remove generated Terraform working files without deleting state
 	@rm -rf $(TF_DIR)/.terraform
+	@rm -rf $(BOOTSTRAP_DIR)/.terraform
 	@rm -f $(PLAN_PATH)
+	@rm -f $(BOOTSTRAP_PLAN_PATH)
 	@rm -f $(TF_DIR)/crash.log $(TF_DIR)/crash.*.log
+	@rm -f $(BOOTSTRAP_DIR)/crash.log $(BOOTSTRAP_DIR)/crash.*.log
 	@echo "Terraform working files removed"
