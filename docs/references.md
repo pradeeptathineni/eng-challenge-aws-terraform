@@ -29,6 +29,7 @@ This document serves to supply all resources that went into developing this proj
 - [Terraform modules](https://developer.hashicorp.com/terraform/language/modules)
 - [Terraform AWS provider subnet resource](https://registry.terraform.io/providers/hashicorp/aws/4.52.0/docs/resources/subnet.html)
 - [Terraform AWS provider AZs data source](https://registry.terraform.io/providers/hashicorp/aws/4.45.0/docs/data-sources/availability_zones)
+- [Terraform for_each](https://developer.hashicorp.com/terraform/language/meta-arguments/for_each)
 
 ### Influences
 
