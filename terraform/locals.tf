@@ -9,22 +9,19 @@ locals {
   # Keep resource names tied to the repo name
   project_name = "eng-challenge-aws-terraform"
 
-  # The challenge requires resources across two availability zones
-  availability_zone_count = 2
-
-  # The challenge requires this VPC address range
+  # VPC address range
   vpc_cidr = "10.0.0.0/16"
 
   # Public subnets in the lower address ranges
   public_subnet_cidrs = [
     "10.0.1.0/24",
-    "10.0.2.0/24",
+    "10.0.2.0/24"
   ]
 
   # Private subnets separate and easily identifiable
   private_subnet_cidrs = [
     "10.0.30.0/24",
-    "10.0.40.0/24",
+    "10.0.40.0/24"
   ]
 
   # Apply default tags to supported AWS resources

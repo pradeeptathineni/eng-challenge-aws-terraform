@@ -122,3 +122,12 @@ This document serves to tell this project's engineering story chronologically an
    - DNS support and DNS hostnames are enabled explicitly on the VPC.
    - This makes the intended VPC DNS behavior clear instead of depending on provider defaults.
    - DNS will be useful as workloads and network services are added.
+
+1. **Code resources dynamically where feasible**
+   - Availability zone names can be hard-coded very simply, but that limits the scope of shareability/reproducability.
+   - What if this code, which is public and technically open-source, wants to be easily tested by someone in Europe?
+   - Terraform can ask AWS which standard AZs are available in the selected region.
+   - The first two available zones are used because the challenge requires two availability zones.
+   - This allows the same Terraform to work in another AWS region without changing zone names.
+   - Also more interesting/fun.
+   - Similarly, we can use for_each to create multiple subnets, shortening written code.
