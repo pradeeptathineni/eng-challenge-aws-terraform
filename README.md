@@ -8,27 +8,31 @@ A simple AWS infrastructure challenge built with Terraform and developed step by
 
 ## AWS Architecture
 
-The completed infrastructure will include (see DevOps Challenge PDF for reference):
+> All resources are named using the `<prefix>`, defined by `resource_prefix` in [terraform/locals.tf](terraform/locals.tf).
 
 - **VPC**
-  - CIDR `10.0.0.0/16`
+  - `<prefix>-vpc` &mdash; `10.0.0.0/16`
 
 - **Subnets**
-  - two public subnets in different availability zones
-  - two private subnets in different availability zones
+  - Two public subnets in different availability zones
+    - `<prefix>-subnet-public-1` &mdash; `10.0.1.0/24`
+    - `<prefix>-subnet-public-2` &mdash; `10.0.2.0/24`
+  - Two private subnets in different availability zones
+    - `<prefix>-subnet-private-1` &mdash; `10.0.30.0/24`
+    - `<prefix>-subnet-private-2` &mdash; `10.0.40.0/24`
 
 - **Application Load Balancer**
-  - internet-facing
-  - deployed across the public subnets
-  - accepts HTTP on port `80`
-  - accepts HTTPS on port `443`
-  - terminates HTTPS using a self-signed certificate
-  - forwards application traffic to the EC2 instance
+  - Internet-facing
+  - Deployed across the public subnets
+  - Accepts HTTP on port `80`
+  - Accepts HTTPS on port `443`
+  - Terminates HTTPS using a self-signed certificate
+  - Forwards application traffic to the EC2 instance
 
 - **EC2**
-  - one instance in a private subnet
-  - runs a simple web server
-  - receives application traffic from the load balancer
+  - One instance in a private subnet
+  - Runs a simple web server
+  - Receives application traffic from the load balancer
 
 - **Security groups**
   - ALB allows inbound HTTP and HTTPS
@@ -39,6 +43,8 @@ The completed infrastructure will include (see DevOps Challenge PDF for referenc
   - ALB DNS name
   - EC2 private IP address
 
+> See DevOps Challenge PDF for original reference.
+
 ---
 
 ## Execution
@@ -46,32 +52,32 @@ The completed infrastructure will include (see DevOps Challenge PDF for referenc
 ### Requirements
 
 - [Git](https://git-scm.com/install/)
-- [AWS CLI v2](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html#getting-started-install-instructions)
-- [Terraform 1.16.0](https://developer.hashicorp.com/terraform/install)
+- [AWS CLI `v2`](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html#getting-started-install-instructions)
+- [Terraform `1.16.0`](https://developer.hashicorp.com/terraform/install)
 - Bash ~ from [Git Bash](https://git-scm.com/install/windows) for Windows
 - GNU Make ~ from [Chocolatey](https://community.chocolatey.org/packages/make) for Windows
 
 ### Commands
 
-- `make help` - Show available commands
-- `make tools` - Check if local tools are installed and their versions
-- `make version` - Show the active Terraform version
-- `make login` - Log into AWS and verify the active identity
-- `make auth` - Verify AWS credentials and show the active AWS account
-- `make shell-validate` - Check Bash helper scripts for syntax errors
-- `make fmt` - Format all Terraform configuration
-- `make fmt-check` - Check Terraform formatting without changing files
-- `make init` - Initialize Terraform for local development
-- `make init-ci` - Initialize Terraform for CI without backend access
-- `make validate` - Initialize and validate Terraform configuration
-- `make validate-ci` - Initialize and validate Terraform configuration in CI
-- `make plan` - Check AWS identity and create a saved Terraform plan
-- `make apply` - Check AWS identity and apply the saved Terraform plan
-- `make destroy` - Check AWS identity and destroy managed infrastructure
-- `make output` - Show Terraform outputs from the current state
-- `make state-list` - List resources currently tracked by Terraform state
-- `make state-show` - Show one resource from Terraform state using `RESOURCE=<address>`
-- `make clean` - Remove generated Terraform working files without deleting state
+- `make help` &mdash; Show available commands
+- `make tools` &mdash; Check if local tools are installed and their versions
+- `make version` &mdash; Show the active Terraform version
+- `make login` &mdash; Log into AWS and verify the active identity
+- `make auth` &mdash; Verify AWS credentials and show the active AWS account
+- `make shell-validate` &mdash; Check Bash helper scripts for syntax errors
+- `make fmt` &mdash; Format all Terraform configuration
+- `make fmt-check` &mdash; Check Terraform formatting without changing files
+- `make init` &mdash; Initialize Terraform for local development
+- `make init-ci` &mdash; Initialize Terraform for CI without backend access
+- `make validate` &mdash; Initialize and validate Terraform configuration
+- `make validate-ci` &mdash; Initialize and validate Terraform configuration in CI
+- `make plan` &mdash; Check AWS identity and create a saved Terraform plan
+- `make apply` &mdash; Check AWS identity and apply the saved Terraform plan
+- `make destroy` &mdash; Check AWS identity and destroy managed infrastructure
+- `make output` &mdash; Show Terraform outputs from the current state
+- `make state-list` &mdash; List resources currently tracked by Terraform state
+- `make state-show` &mdash; Show one resource from Terraform state using `RESOURCE=<address>`
+- `make clean` &mdash; Remove generated Terraform working files without deleting state
 
 ### Running
 

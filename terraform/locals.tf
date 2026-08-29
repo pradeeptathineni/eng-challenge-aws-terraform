@@ -9,6 +9,9 @@ locals {
   # Keep resource names tied to the repo name
   project_name = "eng-challenge-aws-terraform"
 
+  # All resource names will be prefixed with this
+  resource_prefix = "reframe"
+
   # VPC address range
   vpc_cidr = "10.0.0.0/16"
 
