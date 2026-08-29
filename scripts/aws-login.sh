@@ -28,10 +28,6 @@ command -v aws >/dev/null 2>&1 || \
 [[ -n "${PROFILE}" ]] || \
     error "AWS_PROFILE is not set"
 
-# Make sure the context helper exists
-[[ -x "${CONTEXT_SCRIPT}" ]] || \
-    error "AWS context helper was not found or is not executable"
-
 printf "\nAWS Login\n"
 printf '%s\n' "------------------------------------------------------------"
 printf "Profile: %s\n" "${PROFILE}"
