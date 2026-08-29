@@ -101,3 +101,8 @@ This document serves to tell this project's engineering story chronologically an
      - `Project` = `eng-challenge-aws-terraform`
      - `ManagedBy` = `Terraform`
    - Resource-specific `Name` tags will be added where resources are created.
+
+1. **Keep the root README lightweight**
+   - Serve extra documentation under /docs folder, with reference to them in the root README if needed.
+   - Easier on the eyes and soul.
+   - Keeps the root README focused on project description, requirements, and running.

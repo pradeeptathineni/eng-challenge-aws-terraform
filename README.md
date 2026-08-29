@@ -115,32 +115,4 @@ See [docs/engineering-decisions.md](docs/engineering-decisions.md)
 
 ## References
 
-### Main
-
-- [AWS CLI](https://docs.aws.amazon.com/cli/)
-- [Terraform CLI](https://developer.hashicorp.com/terraform/cli)
-- [Terraform AWS provider](https://registry.terraform.io/providers/hashicorp/aws/latest/docs)
-- [GNU Make](https://www.gnu.org/software/make/manual/make.html)
-- [GNU Bash](https://www.gnu.org/software/bash/manual/bash.html)
-- [GitHub Actions](https://docs.github.com/actions)
-
-### Nuances
-
-- [Hashicorp setup-terraform action](https://github.com/hashicorp/setup-terraform)
-- [AWS CLI get-caller-identity](https://docs.aws.amazon.com/cli/latest/reference/sts/get-caller-identity.html)
-- [AWS CLI environment variable configuration](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-envvars.html)
-- [AWS CLI local development login](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-sign-in.html)
-- [AWS CLI IAM Identity Center authentication](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-sso.html)
-- [Terraform variables](https://developer.hashicorp.com/terraform/language/values/variables)
-- [Terraform locals](https://developer.hashicorp.com/terraform/language/values/locals)
-- [Terraform version constraints](https://developer.hashicorp.com/terraform/language/expressions/version-constraints)
-- [Terraform provider requirements](https://developer.hashicorp.com/terraform/language/providers/requirements)
-
-### Influences
-
-- [github.com/hashicorp/terraform](https://github.com/hashicorp/terraform/blob/main)
-- [Deploy infrastructure with Terraform and CircleCI](https://developer.hashicorp.com/terraform/tutorials/automation/circle-ci)
-- [Automate Terraform with GitHub Actions](https://developer.hashicorp.com/terraform/tutorials/automation/github-actions)
-- [CircleCI vs GitHub Actions](https://devops-daily.com/comparisons/circleci-vs-github-actions)
-- [Running Terraform in automation](https://developer.hashicorp.com/terraform/tutorials/automation/automate-terraform)
-- [Terraform style guide](https://developer.hashicorp.com/terraform/language/style)
+See [docs/references.md](docs/references.md)
