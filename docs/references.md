@@ -13,7 +13,7 @@ This document serves to supply all resources that went into developing this proj
 - [GNU Bash](https://www.gnu.org/software/bash/manual/bash.html)
 - [GitHub Actions](https://docs.github.com/actions)
 
-### Nuances
+### Architecture Standards
 
 - [Hashicorp setup-terraform action](https://github.com/hashicorp/setup-terraform)
 - [AWS CLI get-caller-identity](https://docs.aws.amazon.com/cli/latest/reference/sts/get-caller-identity.html)
@@ -34,8 +34,11 @@ This document serves to supply all resources that went into developing this proj
 - [AWS VPC route tables](https://docs.aws.amazon.com/vpc/latest/userguide/VPC_Route_Tables.html)
 - [Terraform AWS provider route](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/route)
 - [Terraform AWS provider route table association](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/route_table_association)
+- [Terraform AWS provider security group](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/security_group)
+- [Terraform AWS provider security group ingress rule](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/vpc_security_group_ingress_rule)
+- [Terraform AWS provider security group egress rule](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/vpc_security_group_egress_rule)
 
-### Influences
+### Architecture Influences
 
 - [github.com/hashicorp/terraform](https://github.com/hashicorp/terraform/blob/main)
 - [Deploy infrastructure with Terraform and CircleCI](https://developer.hashicorp.com/terraform/tutorials/automation/circle-ci)
@@ -43,3 +46,4 @@ This document serves to supply all resources that went into developing this proj
 - [CircleCI vs GitHub Actions](https://devops-daily.com/comparisons/circleci-vs-github-actions)
 - [Running Terraform in automation](https://developer.hashicorp.com/terraform/tutorials/automation/automate-terraform)
 - [Terraform style guide](https://developer.hashicorp.com/terraform/language/style)
+- [AWS ALB security groups](https://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-update-security-groups.html)

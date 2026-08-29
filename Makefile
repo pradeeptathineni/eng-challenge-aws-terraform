@@ -14,7 +14,7 @@ AWS_PROFILE ?= default
 
 .DEFAULT_GOAL := help
 
-.PHONY: help tools version login auth shell-validate fmt fmt-check init init-ci validate validate-ci plan apply destroy output state-list state-show clean
+.PHONY: help tools version login auth shell-validate fmt fmt-check init init-ci validate validate-ci plan plan-show apply destroy output state-list state-show clean
 
 help: ## Show available commands
 	@echo "AWS Terraform Engineering Challenge"
@@ -70,6 +70,14 @@ validate-ci: init-ci ## Initialize and validate Terraform configuration in CI
 plan: validate ## Check AWS identity and create a saved Terraform plan
 	@$(MAKE) --no-print-directory auth
 	@terraform -chdir=$(TF_DIR) plan -out=$(PLAN_FILE)
+
+plan-show: ## Show the saved Terraform plan
+	@test -f "$(TF_DIR)/$(PLAN_FILE)" || { \
+		echo "ERROR: No saved plan found"; \
+		echo "Run 'make plan' first"; \
+		exit 1; \
+	}
+	@terraform -chdir=$(TF_DIR) show $(PLAN_FILE)
 
 apply: ## Check AWS identity and apply the saved Terraform plan
 	@if [ ! -f "$(TF_DIR)/$(PLAN_FILE)" ]; then \

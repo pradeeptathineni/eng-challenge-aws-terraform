@@ -35,15 +35,20 @@ A simple AWS infrastructure challenge built with Terraform and developed step by
   - Receives application traffic from the load balancer
 
 - **Security groups**
-  - ALB allows inbound HTTP and HTTPS
-  - EC2 allows application traffic from the ALB security group
-  - EC2 allows SSH on port `22` from the VPC CIDR
+  - `<prefix>-sg-alb`
+    - inbound HTTP `80` from `0.0.0.0/0`
+    - inbound HTTPS `443` from `0.0.0.0/0`
+    - outbound HTTP `80` to `<prefix>-sg-ec2`
+  - `<prefix>-sg-ec2`
+    - inbound HTTP `80` from `<prefix>-sg-alb`
+    - inbound SSH `22` from `10.0.0.0/16`
+    - outbound traffic allowed
 
 - **Terraform outputs**
   - ALB DNS name
   - EC2 private IP address
 
-> See DevOps Challenge PDF for original reference.
+> See [DevOpsChallenge.pdf](DevOpsChallenge.pdf) for original architecture reference.
 
 ---
 
@@ -72,6 +77,7 @@ A simple AWS infrastructure challenge built with Terraform and developed step by
 - `make validate` &mdash; Initialize and validate Terraform configuration
 - `make validate-ci` &mdash; Initialize and validate Terraform configuration in CI
 - `make plan` &mdash; Check AWS identity and create a saved Terraform plan
+- `plan-show` &mdash; Show the saved Terraform plan
 - `make apply` &mdash; Check AWS identity and apply the saved Terraform plan
 - `make destroy` &mdash; Check AWS identity and destroy managed infrastructure
 - `make output` &mdash; Show Terraform outputs from the current state

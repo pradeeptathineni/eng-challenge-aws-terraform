@@ -2,6 +2,8 @@
 
 This document serves to tell this project's engineering story chronologically and cohesively; a lightweight ADR log.
 
+> The &#11088; symbol represents a responsible architecture decision that is not explicitly part of the original infrastructure criteria (see [DevOpsChallenge.pdf](../DevOpsChallenge.pdf)).
+
 ---
 
 1. **Initial thoughts**
@@ -141,5 +143,21 @@ This document serves to tell this project's engineering story chronologically an
    - Naming a subnet with "\*public\*" is not what makes it a "public subnet".
    - A public subnet is a subnet that is associated with a Route Table that has a route to an Internet Gateway (Igw). This route allows access from the Public Internet to the subnet.
    - Reference: [AWS Public and Private Subnets](https://www.learnaws.org/2022/06/22/public-private-subnets)
-   - In this logic, the architecture must evolve from original specifications to include an Internet Gateway.
+   - &#11088; In this logic, the architecture must evolve from original specifications to include an Internet Gateway.
    - The route table then sends `0.0.0.0/0` traffic to the Internet Gateway.
+
+1. **Module for web infrastructure separate from network infrastructure**
+   - The `network` module owns VPC networking and routing.
+   - The `web` module owns security and application infrastructure.
+   - The root module/main.tf connects the two using module outputs and inputs.
+
+1. **Limit ALB outbound traffic**
+   - The ALB only needs to reach the EC2 web server on HTTP port `80`.
+   - &#11088; The ALB outbound rule therefore solely targets the EC2 security group on that port.
+   - This follows least privilege.
+   - Reference: [AWS ALB security groups](https://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-update-security-groups.html)
+   - Referencing security groups for network rules also helps avoid hardcoding possibly changing IPs.
+
+1. **Allow EC2 outbound traffic**
+   - &#11088; The EC2 security group should permit outbound traffic in consideration of web server workloads.
+   - The private subnet still has no internet route though.

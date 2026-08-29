@@ -1,4 +1,4 @@
-# versions.tf - Define provider requirements for the network module
+# versions.tf - Define provider requirements for the web module
 
 # References:
 # Terraform provider requirements
