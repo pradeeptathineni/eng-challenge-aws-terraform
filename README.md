@@ -67,31 +67,56 @@ The completed infrastructure will include (see DevOps Challenge PDF for referenc
 - `make validate-ci` - Initialize and validate Terraform configuration in CI
 - `make plan` - Check AWS identity and create a saved Terraform plan
 - `make apply` - Check AWS identity and apply the saved Terraform plan
-- `make output` - Check AWS identity and destroy managed infrastructure
-- `make destroy` - Show Terraform outputs from the current state
+- `make destroy` - Check AWS identity and destroy managed infrastructure
+- `make output` - Show Terraform outputs from the current state
 - `make clean` - Remove generated Terraform working files without deleting state
 
-### Running - Deployment
+### Running
 
-- `make login` - log into AWS and show the active identity
-- `make auth` - verify and show the current AWS identity without logging in
-- use `AWS_PROFILE` when working with a named AWS profile
+1. Configure your AWS CLI with the proper credentials if you haven't already.
 
-Default profile:
+   ```bash
+   # IAM Identity Center / SSO
+   aws configure sso --profile <aws-profile>
 
-```bash
-make login
-make auth
-make plan
-```
+   # AWS local development login
+   aws configure set region <aws-region> --profile <aws-profile>
 
-Named profile:
+   # Long-lived IAM access keys if required
+   aws configure --profile <aws-profile>
+   ```
 
-```bash
-make login AWS_PROFILE=<profile-name>
-make auth AWS_PROFILE=<profile-name>
-make plan AWS_PROFILE=<profile-name>
-```
+1. Set AWS_PROFILE to the profile configured to authenticate you to the correct target AWS account.
+
+   ```bash
+   export AWS_PROFILE=<aws-profile>
+
+   # sanity check
+   echo "$AWS_PROFILE"
+   ```
+
+1. Log into AWS and authenticate its authority.
+
+   ```bash
+   make login
+   make auth
+
+   # sanity check
+   aws s3 ls
+   ```
+
+1. Plan and deploy the Terraform infrastructure.
+
+   ```bash
+   make plan
+   make apply
+   ```
+
+1. Tear down the deployment when finished.
+
+   ```bash
+   make destroy
+   ```
 
 ### CI
 

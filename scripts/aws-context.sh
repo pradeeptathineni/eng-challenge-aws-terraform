@@ -3,7 +3,8 @@
 # aws-context.sh - Verify and display the active AWS identity
 # Usage: ./scripts/aws-context.sh
 #
-# Checks whether the current AWS credentials are valid
+# Requires AWS_PROFILE to be set
+# Checks whether the selected profile's AWS credentials are valid
 # Shows the active account, principal, user ID, profile, and region
 # Optionally verifies EXPECTED_AWS_ACCOUNT_ID when it is set
 
@@ -16,6 +17,8 @@ set -euo pipefail
 # Disable the AWS CLI output pager
 export AWS_PAGER=""
 
+PROFILE="${AWS_PROFILE:-}"
+
 error() {
     printf "ERROR: %s\n" "$1" >&2
     exit 1
@@ -25,15 +28,17 @@ error() {
 command -v aws >/dev/null 2>&1 || \
     error "AWS CLI was not found"
 
-# Show the selected profile when one was explicitly set
-PROFILE="${AWS_PROFILE:-<not explicitly set>}"
+# Require the AWS profile to be selected explicitly
+[[ -n "${PROFILE}" ]] || \
+    error "AWS_PROFILE is not set"
+
 
 # Check common AWS region settings
 REGION="${AWS_REGION:-${AWS_DEFAULT_REGION:-}}"
 
 # Fall back to the AWS CLI configured region
 if [[ -z "${REGION}" ]]; then
-    REGION="$(aws configure get region 2>/dev/null || true)"
+    REGION="$(aws configure get region --profile "${PROFILE}" 2>/dev/null || true)"
 fi
 
 # Show a clear value when no CLI region is configured
@@ -42,6 +47,7 @@ REGION="${REGION:-<not configured>}"
 # Ask AWS which identity the current credentials belong to
 if ! IDENTITY="$(
     aws sts get-caller-identity \
+        --profile "${PROFILE}" \
         --query '[Account,Arn,UserId]' \
         --output text 2>&1
 )"; then

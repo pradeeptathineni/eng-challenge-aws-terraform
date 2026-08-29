@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 
 # aws-login.sh - Log into AWS for local development
-# Usage: ./scripts/aws-login.sh [profile]
+# Usage: ./scripts/aws-login.sh
 #
-# Uses AWS SSO when the selected profile is configured for IAM Identity Center
+# Requires AWS_PROFILE to be set
+# Uses AWS SSO when the profile uses IAM Identity Center
 # Uses `aws login` otherwise
-# Verifies the active AWS identity after login
 
 # References
 # AWS CLI local development login
@@ -13,8 +13,7 @@
 
 set -euo pipefail
 
-PROFILE="${1:-${AWS_PROFILE:-default}}"
-CONTEXT_SCRIPT="$(dirname "$0")/aws-context.sh"
+PROFILE="${AWS_PROFILE:-}"
 
 error() {
     printf "ERROR: %s\n" "$1" >&2
@@ -24,6 +23,10 @@ error() {
 # Make sure the AWS CLI is installed
 command -v aws >/dev/null 2>&1 || \
     error "AWS CLI was not found"
+
+# Require the AWS profile to be selected explicitly
+[[ -n "${PROFILE}" ]] || \
+    error "AWS_PROFILE is not set"
 
 # Make sure the context helper exists
 [[ -x "${CONTEXT_SCRIPT}" ]] || \
@@ -50,6 +53,3 @@ fi
 export AWS_PROFILE="${PROFILE}"
 
 printf "\nLogin complete\n"
-
-# Verify and display the authenticated AWS identity
-"${CONTEXT_SCRIPT}"

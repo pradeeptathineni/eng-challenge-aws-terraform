@@ -106,3 +106,8 @@ This document serves to tell this project's engineering story chronologically an
    - Serve extra documentation under /docs folder, with reference to them in the root README if needed.
    - Easier on the eyes and soul.
    - Keeps the root README focused on project description, requirements, and running.
+
+1. **Ensure complete end-to-end operation clarity**
+   - A user should have no questions between the very first and very last steps of execution.
+   - User responsibilities like installing necessary tools and properly configuring their AWS CLI profiles should be very clear.
+   - User is also aware of the responsibility to explicitly set their AWS_PROFILE, instead of the helper scripts quietly defaulting to "default" which is not the best.
