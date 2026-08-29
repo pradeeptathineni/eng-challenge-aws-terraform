@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 # user-data.sh - Configure the EC2 instance as a simple web server
+# Takes advantage of already installed python3 http.server package
 
 # References:
 # Amazon EC2 user data

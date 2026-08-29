@@ -18,6 +18,7 @@ module "web" {
   vpc_cidr        = local.vpc_cidr
   vpc_id          = module.network.vpc_id
 
+  public_subnet_ids = module.network.public_subnet_ids
   private_subnet_id = module.network.private_subnet_ids[0]
   instance_type     = var.instance_type
 }

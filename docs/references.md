@@ -40,6 +40,13 @@ This document serves to supply all resources that went into developing this proj
 - [AWS Systems Manager public AMI parameters](https://docs.aws.amazon.com/systems-manager/latest/userguide/parameter-store-public-parameters-ami.html)
 - [Terraform AWS provider EC2 instance](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/instance)
 - [Amazon EC2 user data](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/user-data.html)
+- [Terraform AWS provider load balancer](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/lb)
+- [Terraform AWS provider target group](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/lb_target_group)
+- [Terraform AWS provider target group attachment](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/lb_target_group_attachment)
+- [Terraform AWS provider load balancer listener](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/lb_listener)
+- [AWS Application Load Balancer target groups](https://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-target-groups.html)
+- [AWS Application Load Balancer health checks](https://docs.aws.amazon.com/elasticloadbalancing/latest/application/target-group-health-checks.html)
+- [AWS Application Load Balancer security groups](https://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-update-security-groups.html)
 
 ### Architecture Influences
 

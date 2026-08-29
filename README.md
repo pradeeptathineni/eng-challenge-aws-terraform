@@ -83,7 +83,8 @@ An AWS infrastructure challenge built with Terraform and developed step by step 
    ```bash
    make login
 
-   # sanity check
+   # sanity checks
+   make auth
    aws s3 ls
    ```
 
@@ -97,18 +98,29 @@ An AWS infrastructure challenge built with Terraform and developed step by step 
 
    ```bash
    make plan
+
+   # sanity check
+   make plan-show
    ```
 
 1. Apply the Terraform infrastructure.
 
    ```bash
    make apply
+
+   # sanity checks
+   make output
+   make state-list
+   make state-show RESOURCE=<address>
    ```
 
 1. Tear down the deployment when finished.
 
    ```bash
    make destroy
+
+   # sanity completion
+   make clean
    ```
 
 ### Continuous Integration

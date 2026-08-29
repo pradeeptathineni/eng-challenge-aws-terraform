@@ -175,3 +175,8 @@ This document serves to tell this project's engineering story chronologically an
    - The EC2 web server will use AL2023's built-in Python runtime so instance bootstrap does not require internet access or package installation.
    - Reference: [AL2023 on Amazon EC2](https://docs.aws.amazon.com/linux/al2023/ug/ec2.html)
    - This makes NAT (expensive) and administrative SSH reachability (could just use Session Manager) totally separate enhancement considerations, rather than hard requirements of the baseline workload!
+
+1. **Separate load balancing from TLS configuration**
+   - &#11088; The internet-facing ALB spans both public subnets and forwards traffic to the private EC2 instance through a dedicated target group.
+   - Target health is verified over the same HTTP `80` path used by application traffic.
+   - HTTP routing is implemented and verified before adding certificate and HTTPS concerns.

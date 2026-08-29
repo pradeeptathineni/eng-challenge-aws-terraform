@@ -27,6 +27,15 @@ This document serves to detail all AWS resources that are defined by and deploya
 - Accepts HTTPS on port `443`
 - Terminates HTTPS using a self-signed certificate
 - Forwards application traffic to the EC2 instance
+- `<prefix>-alb`
+  - Internet-facing across both public subnets
+  - HTTP `80` listener
+
+### Target Group
+
+- `<prefix>-tg-web`
+  - Forwards HTTP `80` to the private EC2 instance
+  - Health checks `GET /`
 
 ### EC2
 

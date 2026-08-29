@@ -27,3 +27,8 @@ variable "instance_type" {
   description = "EC2 instance type used by the web server"
   type        = string
 }
+
+variable "public_subnet_ids" {
+  description = "IDs of the public subnets used by the load balancer"
+  type        = list(string)
+}
