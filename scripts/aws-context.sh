@@ -8,7 +8,7 @@
 # Shows the active account, principal, user ID, profile, and region
 # Optionally verifies EXPECTED_AWS_ACCOUNT_ID when it is set
 
-# References
+# References:
 # AWS CLI get-caller-identity
 # AWS CLI environment variable configuration
 

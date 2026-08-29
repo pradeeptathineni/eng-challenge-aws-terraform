@@ -47,7 +47,7 @@ The completed infrastructure will include (see DevOps Challenge PDF for referenc
 
 - [Git](https://git-scm.com/install/)
 - [AWS CLI v2](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html#getting-started-install-instructions)
-- [Terraform `1.16.0`](https://developer.hashicorp.com/terraform/install)
+- [Terraform 1.16.0](https://developer.hashicorp.com/terraform/install)
 - Bash ~ from [Git Bash](https://git-scm.com/install/windows) for Windows
 - GNU Make ~ from [Chocolatey](https://community.chocolatey.org/packages/make) for Windows
 

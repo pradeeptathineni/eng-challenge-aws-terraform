@@ -7,7 +7,7 @@
 # Uses AWS SSO when the profile uses IAM Identity Center
 # Uses `aws login` otherwise
 
-# References
+# References:
 # AWS CLI local development login
 # AWS CLI IAM Identity Center authentication
 
