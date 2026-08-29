@@ -2,7 +2,7 @@
 
 This document serves to tell this project's engineering story chronologically and cohesively; a lightweight ADR log.
 
-> The &#11088; symbol represents a responsible architecture decision that is not explicitly part of the original infrastructure criteria (see [DevOpsChallenge.pdf](../DevOpsChallenge.pdf)).
+> The &#11088; symbol represents a responsible architecture addition that is not explicitly part of the original infrastructure criteria (see [DevOpsChallenge.pdf](../DevOpsChallenge.pdf)).
 
 ---
 
@@ -168,3 +168,10 @@ This document serves to tell this project's engineering story chronologically an
    - Show an obvious separation between primitive/focused/helper commands and actual developer workflows.
    - This makes usage more and extensibility more clear.
    - Our CI configuration also benefits from less complexity.
+
+1. **Keep the baseline private workload self-contained**
+   - The EC2 instance runs in a private subnet without a public IP, so I had to consider just how does such a machine get access to download packages from the internet, such as those needed for web-hosting.
+   - The instance will use Amazon Linux 2023 AMI, which iss resolved through AWS's public SSM AMI parameter rather than a hard-coded regional AMI ID.
+   - The EC2 web server will use AL2023's built-in Python runtime so instance bootstrap does not require internet access or package installation.
+   - Reference: [AL2023 on Amazon EC2](https://docs.aws.amazon.com/linux/al2023/ug/ec2.html)
+   - This makes NAT (expensive) and administrative SSH reachability (could just use Session Manager) totally separate enhancement considerations, rather than hard requirements of the baseline workload!

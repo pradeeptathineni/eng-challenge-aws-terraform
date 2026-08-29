@@ -33,6 +33,11 @@ This document serves to detail all AWS resources that are defined by and deploya
 - One instance in a private subnet
 - Runs a simple web server
 - Receives application traffic from the load balancer
+- `<prefix>-ec2-web`
+  - Amazon Linux 2023
+  - `t3.micro` by default
+  - Deployed in a private subnet without a public IP
+  - Simple HTTP web server on port `80`
 
 ### Security groups
 

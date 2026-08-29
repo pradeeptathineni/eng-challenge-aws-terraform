@@ -17,4 +17,7 @@ module "web" {
   resource_prefix = local.resource_prefix
   vpc_cidr        = local.vpc_cidr
   vpc_id          = module.network.vpc_id
+
+  private_subnet_id = module.network.private_subnet_ids[0]
+  instance_type     = var.instance_type
 }

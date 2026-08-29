@@ -47,3 +47,4 @@ This document serves to supply all resources that went into developing this proj
 - [Running Terraform in automation](https://developer.hashicorp.com/terraform/tutorials/automation/automate-terraform)
 - [Terraform style guide](https://developer.hashicorp.com/terraform/language/style)
 - [AWS ALB security groups](https://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-update-security-groups.html)
+- [AL2023 on Amazon EC2](https://docs.aws.amazon.com/linux/al2023/ug/ec2.html)

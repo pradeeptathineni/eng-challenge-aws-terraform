@@ -17,3 +17,13 @@ variable "vpc_cidr" {
   description = "IPv4 CIDR block used by the VPC"
   type        = string
 }
+
+variable "private_subnet_id" {
+  description = "ID of the private subnet used by the EC2 instance"
+  type        = string
+}
+
+variable "instance_type" {
+  description = "EC2 instance type used by the web server"
+  type        = string
+}
