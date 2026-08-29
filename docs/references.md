@@ -49,6 +49,13 @@ This document serves to supply all resources that went into developing this proj
 - [AWS Application Load Balancer security groups](https://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-update-security-groups.html)
 - [Terraform outputs](https://developer.hashicorp.com/terraform/language/values/outputs)
 - [Terraform output command](https://developer.hashicorp.com/terraform/cli/commands/output)
+- [Terraform TLS provider](https://registry.terraform.io/providers/hashicorp/tls/latest)
+- [Terraform TLS private key](https://registry.terraform.io/providers/hashicorp/tls/latest/docs/resources/private_key)
+- [Terraform TLS self-signed certificate](https://registry.terraform.io/providers/hashicorp/tls/latest/docs/resources/self_signed_cert)
+- [Terraform AWS provider ACM certificate](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/acm_certificate)
+- [Terraform AWS provider load balancer listener](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/lb_listener)
+- [AWS ALB HTTPS listeners](https://docs.aws.amazon.com/elasticloadbalancing/latest/application/create-https-listener.html)
+- [AWS ALB certificates](https://docs.aws.amazon.com/elasticloadbalancing/latest/application/https-listener-certificates.html)
 
 ### Architecture Influences
 
@@ -60,3 +67,4 @@ This document serves to supply all resources that went into developing this proj
 - [Terraform style guide](https://developer.hashicorp.com/terraform/language/style)
 - [AWS ALB security groups](https://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-update-security-groups.html)
 - [AL2023 on Amazon EC2](https://docs.aws.amazon.com/linux/al2023/ug/ec2.html)
+- [AWS ALB security policies](https://docs.aws.amazon.com/elasticloadbalancing/latest/application/describe-ssl-policies.html)

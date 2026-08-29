@@ -6,9 +6,7 @@ This document serves to detail all AWS resources that are defined by and deploya
 
 ---
 
-### VPC
-
-- `<prefix>-vpc` — `10.0.0.0/16`
+### VPC — `<prefix>-vpc` — `10.0.0.0/16`
 
 ### Subnets
 
@@ -19,49 +17,46 @@ This document serves to detail all AWS resources that are defined by and deploya
   - `<prefix>-subnet-private-1` — `10.0.30.0/24`
   - `<prefix>-subnet-private-2` — `10.0.40.0/24`
 
-### Application Load Balancer
+### Application Load Balancer — `<prefix>-alb`
 
-- Internet-facing
-- Deployed across the public subnets
-- Accepts HTTP on port `80`
-- Accepts HTTPS on port `443`
-- Terminates HTTPS using a self-signed certificate
+- Internet-facing across both public subnets
+- HTTP `80` redirects to HTTPS `443`
+- HTTPS `443` terminates TLS using a self-signed certificate
 - Forwards application traffic to the EC2 instance
-- `<prefix>-alb`
-  - Internet-facing across both public subnets
-  - HTTP `80` listener
 
-### Target Group
+### TLS Certificate — `<prefix>-cert-alb`
 
-- `<prefix>-tg-web`
-  - Forwards HTTP `80` to the private EC2 instance
-  - Health checks `GET /`
+- Terraform-generated self-signed certificate imported into AWS Certificate Manager
 
-### EC2
+### Target Group — `<prefix>-tg-web`
 
-- One instance in a private subnet
-- Runs a simple web server
+- Forwards HTTP `80` to the private EC2 instance
+- Health checks `GET /`
+
+### EC2 — `<prefix>-ec2-web`
+
+- Single private instance web-server
+- Amazon Linux 2023 AMI
+- `t3.micro` by default
+- Deployed in a private subnet without a public IP
+- Simple HTTP web server on port `80` using python3 http.server package
+- User data configures hardcoded web content
 - Receives application traffic from the load balancer
-- `<prefix>-ec2-web`
-  - Amazon Linux 2023
-  - `t3.micro` by default
-  - Deployed in a private subnet without a public IP
-  - Simple HTTP web server on port `80`
 
 ### Security groups
 
 - `<prefix>-sg-alb`
-  - inbound HTTP `80` from `0.0.0.0/0`
-  - inbound HTTPS `443` from `0.0.0.0/0`
-  - outbound HTTP `80` to `<prefix>-sg-ec2`
+  - Inbound HTTP `80` from `0.0.0.0/0`
+  - Inbound HTTPS `443` from `0.0.0.0/0`
+  - Outbound HTTP `80` to `<prefix>-sg-ec2`
 - `<prefix>-sg-ec2`
-  - inbound HTTP `80` from `<prefix>-sg-alb`
-  - inbound SSH `22` from `10.0.0.0/16`
-  - outbound traffic allowed
+  - Inbound HTTP `80` from `<prefix>-sg-alb`
+  - Inbound SSH `22` from `10.0.0.0/16`
+  - Outbound traffic allowed
 
 ### Terraform outputs
 
-- ALB DNS name
-- EC2 private IP address
+- `alb_dns_name` — ALB DNS name
+- `ec2_private_ip` — EC2 private IP address
 
 > See [DevOpsChallenge.pdf](DevOpsChallenge.pdf) for original architecture reference.

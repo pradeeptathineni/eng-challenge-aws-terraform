@@ -3,6 +3,7 @@
 
 # References:
 # Terraform version constraints
+# Terraform provider requirements
 
 terraform {
   required_version = "~> 1.16.0"
@@ -11,6 +12,11 @@ terraform {
     aws = {
       source  = "hashicorp/aws"
       version = "~> 6.60.0"
+    }
+
+    tls = {
+      source  = "hashicorp/tls"
+      version = "~> 4.3.0"
     }
   }
 }
