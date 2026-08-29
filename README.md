@@ -11,33 +11,33 @@ A simple AWS infrastructure challenge built with Terraform and developed step by
 The completed infrastructure will include (see DevOps Challenge PDF for reference):
 
 - **VPC**
-    - CIDR `10.0.0.0/16`
+  - CIDR `10.0.0.0/16`
 
 - **Subnets**
-    - two public subnets in different availability zones
-    - two private subnets in different availability zones
+  - two public subnets in different availability zones
+  - two private subnets in different availability zones
 
 - **Application Load Balancer**
-    - internet-facing
-    - deployed across the public subnets
-    - accepts HTTP on port `80`
-    - accepts HTTPS on port `443`
-    - terminates HTTPS using a self-signed certificate
-    - forwards application traffic to the EC2 instance
+  - internet-facing
+  - deployed across the public subnets
+  - accepts HTTP on port `80`
+  - accepts HTTPS on port `443`
+  - terminates HTTPS using a self-signed certificate
+  - forwards application traffic to the EC2 instance
 
 - **EC2**
-    - one instance in a private subnet
-    - runs a simple web server
-    - receives application traffic from the load balancer
+  - one instance in a private subnet
+  - runs a simple web server
+  - receives application traffic from the load balancer
 
 - **Security groups**
-    - ALB allows inbound HTTP and HTTPS
-    - EC2 allows application traffic from the ALB security group
-    - EC2 allows SSH on port `22` from the VPC CIDR
+  - ALB allows inbound HTTP and HTTPS
+  - EC2 allows application traffic from the ALB security group
+  - EC2 allows SSH on port `22` from the VPC CIDR
 
 - **Terraform outputs**
-    - ALB DNS name
-    - EC2 private IP address
+  - ALB DNS name
+  - EC2 private IP address
 
 ---
 
@@ -143,3 +143,4 @@ See [docs/engineering-decisions.md](docs/engineering-decisions.md)
 - [Automate Terraform with GitHub Actions](https://developer.hashicorp.com/terraform/tutorials/automation/github-actions)
 - [CircleCI vs GitHub Actions](https://devops-daily.com/comparisons/circleci-vs-github-actions)
 - [Running Terraform in automation](https://developer.hashicorp.com/terraform/tutorials/automation/automate-terraform)
+- [Terraform style guide](https://developer.hashicorp.com/terraform/language/style)
