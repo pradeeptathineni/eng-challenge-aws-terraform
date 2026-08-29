@@ -1,3 +1,5 @@
+# Makefile - Centralized models for AWS/Terraform infrastructure deployment
+
 # References:
 # GNU Make
 # AWS CLI

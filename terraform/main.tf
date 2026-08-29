@@ -1,2 +1,11 @@
 # main.tf - Connect the root configuration to infrastructure modules
-# Modules will be added as the AWS architecture is built
+
+# References:
+# Terraform modules
+
+module "network" {
+  source = "./modules/network"
+
+  project_name = local.project_name
+  vpc_cidr     = local.vpc_cidr
+}

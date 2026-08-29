@@ -24,6 +24,9 @@ This document serves to supply all resources that went into developing this proj
 - [Terraform locals](https://developer.hashicorp.com/terraform/language/values/locals)
 - [Terraform version constraints](https://developer.hashicorp.com/terraform/language/expressions/version-constraints)
 - [Terraform provider requirements](https://developer.hashicorp.com/terraform/language/providers/requirements)
+- [Terraform AWS provider VPC resource](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/vpc)
+- [Terraform providers within modules](https://developer.hashicorp.com/terraform/language/modules/develop/providers)
+- [Terraform modules](https://developer.hashicorp.com/terraform/language/modules)
 
 ### Influences
 

@@ -111,3 +111,14 @@ This document serves to tell this project's engineering story chronologically an
    - A user should have no questions between the very first and very last steps of execution.
    - User responsibilities like installing necessary tools and properly configuring their AWS CLI profiles should be very clear.
    - User is also aware of the responsibility to explicitly set their AWS_PROFILE, instead of the helper scripts quietly defaulting to "default" which is not the best.
+
+1. **Modular Terraform infrastructure definitions**
+   - The root Terraform configuration defines how the whole architecture is assembled.
+   - AWS resources are grouped into modules by their architectural responsibility.
+   - Network infrastructure in a `network` module.
+   - Web infrastructure in a `web` module.
+
+1. **Enable VPC DNS support**
+   - DNS support and DNS hostnames are enabled explicitly on the VPC.
+   - This makes the intended VPC DNS behavior clear instead of depending on provider defaults.
+   - DNS will be useful as workloads and network services are added.
