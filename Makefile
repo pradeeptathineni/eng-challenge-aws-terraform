@@ -14,7 +14,7 @@ AWS_PROFILE ?= default
 
 .DEFAULT_GOAL := help
 
-.PHONY: help tools version login auth shell-validate fmt fmt-check init init-ci validate validate-ci plan apply destroy output clean
+.PHONY: help tools version login auth shell-validate fmt fmt-check init init-ci validate validate-ci plan apply destroy output state-list state-show clean
 
 help: ## Show available commands
 	@echo "AWS Terraform Engineering Challenge"
@@ -86,6 +86,13 @@ destroy: init ## Check AWS identity and destroy managed infrastructure
 
 output: ## Show Terraform outputs from the current state
 	@terraform -chdir=$(TF_DIR) output
+
+state-list: ## List resources currently tracked by Terraform state
+	@terraform -chdir=$(TF_DIR) state list
+
+state-show: ## Show one resource from Terraform state using RESOURCE=<address>
+	@test -n "$(RESOURCE)" || { echo "ERROR: RESOURCE is required"; exit 1; }
+	@terraform -chdir=$(TF_DIR) state show '$(RESOURCE)'
 
 clean: ## Remove generated Terraform working files without deleting state
 	@rm -rf $(TF_DIR)/.terraform

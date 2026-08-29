@@ -69,6 +69,8 @@ The completed infrastructure will include (see DevOps Challenge PDF for referenc
 - `make apply` - Check AWS identity and apply the saved Terraform plan
 - `make destroy` - Check AWS identity and destroy managed infrastructure
 - `make output` - Show Terraform outputs from the current state
+- `make state-list` - List resources currently tracked by Terraform state
+- `make state-show` - Show one resource from Terraform state using `RESOURCE=<address>`
 - `make clean` - Remove generated Terraform working files without deleting state
 
 ### Running
