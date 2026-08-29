@@ -185,5 +185,7 @@ This document serves to tell this project's engineering story chronologically an
    - A Terraform-generated self-signed certificate is imported into AWS Certificate Manager.
    - HTTP requests redirect to HTTPS while the ALB forwards decrypted HTTP traffic to the private EC2 target.
    - The certificate matches the generated ALB DNS name and uses a modern AWS TLS security policy.
-   - Reference: [AWS ALB security policies](https://docs.aws.amazon.com/elasticloadbalancing/latest/application/describe-ssl-policies.html?utm_source=chatgpt.com)
+   - Reference: [AWS ALB security policies](https://docs.aws.amazon.com/elasticloadbalancing/latest/application/describe-ssl-policies.html)
    - Terraform-managed private key material is acceptable for this disposable challenge but would be replaced with managed certificate issuance in production
+
+   ### Stable v1 of complete architecture has been realized!
