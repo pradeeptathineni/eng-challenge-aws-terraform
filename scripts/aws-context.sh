@@ -40,12 +40,7 @@ if ! IDENTITY="$(
 )"; then
     printf "\nAWS authentication failed\n\n" >&2
     printf "%s\n\n" "${IDENTITY}" >&2
-
-    # Show the common SSO login command when a profile is selected
-    if [[ -n "${AWS_PROFILE:-}" ]]; then
-        printf "If this profile uses AWS SSO run\n" >&2
-        printf "  aws sso login --profile %s\n\n" "${AWS_PROFILE}" >&2
-    fi
+    printf "Run 'make login' to authenticate again\n" >&2
 
     exit 1
 fi

@@ -5,11 +5,14 @@
 
 TF_DIR := terraform
 PLAN_FILE := tfplan
+
+AWS_LOGIN_SCRIPT := scripts/aws-login.sh
 AWS_CONTEXT_SCRIPT := scripts/aws-context.sh
+AWS_PROFILE ?= default
 
 .DEFAULT_GOAL := help
 
-.PHONY: help tools version auth shell-validate fmt fmt-check init init-ci validate validate-ci plan apply destroy output clean
+.PHONY: help tools version login auth shell-validate fmt fmt-check init init-ci validate validate-ci plan apply destroy output clean
 
 help: ## Show available commands
 	@echo "AWS Terraform Engineering Challenge"
@@ -32,11 +35,17 @@ tools: ## Check if local tools are installed and their versions
 version: ## Show the active Terraform version
 	@terraform version
 
+login: ## Log into AWS and verify the active identity
+	@$(AWS_LOGIN_SCRIPT) "$(AWS_PROFILE)"
+
 auth: ## Verify AWS credentials and show the active AWS account
 	@$(AWS_CONTEXT_SCRIPT)
 
 shell-validate: ## Check Bash helper scripts for syntax errors
-	@bash -n $(AWS_CONTEXT_SCRIPT)
+	@for script in scripts/*.sh; do \
+		echo "Checking $$script"; \
+		bash -n "$$script"; \
+	done
 
 fmt: ## Format all Terraform configuration
 	@terraform -chdir=$(TF_DIR) fmt -recursive
