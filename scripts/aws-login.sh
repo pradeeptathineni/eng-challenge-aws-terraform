@@ -7,7 +7,7 @@
 # Uses `aws login` otherwise
 # Verifies the active AWS identity after login
 
-# References
+# References:
 # AWS CLI local development login
 # AWS CLI IAM Identity Center authentication
 

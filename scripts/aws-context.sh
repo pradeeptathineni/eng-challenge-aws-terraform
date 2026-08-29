@@ -1,5 +1,12 @@
 #!/usr/bin/env bash
 
+# aws-context.sh - Verify and display the active AWS identity
+# Usage: ./scripts/aws-context.sh
+#
+# Checks whether the current AWS credentials are valid
+# Shows the active account, principal, user ID, profile, and region
+# Optionally verifies EXPECTED_AWS_ACCOUNT_ID when it is set
+
 # References:
 # AWS CLI get-caller-identity
 # AWS CLI environment variable configuration
