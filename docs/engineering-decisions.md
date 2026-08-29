@@ -131,3 +131,15 @@ This document serves to tell this project's engineering story chronologically an
    - This allows the same Terraform to work in another AWS region without changing zone names.
    - Also more interesting/fun.
    - Similarly, we can use for_each to create multiple subnets, shortening written code.
+
+1. **Separate routing from core network resources**
+   - VPC and subnet resources remain in `main.tf`.
+   - Internet routing is kept in `routing.tf`.
+   - This keeps the module easier to read without creating unnecessary child modules.
+
+1. **Hold public subnets accountable as "public"**
+   - Naming a subnet with "\*public\*" is not what makes it a "public subnet".
+   - A public subnet is a subnet that is associated with a Route Table that has a route to an Internet Gateway (Igw). This route allows access from the Public Internet to the subnet.
+   - Reference: [AWS Public and Private Subnets](https://www.learnaws.org/2022/06/22/public-private-subnets)
+   - In this logic, the architecture must evolve from original specifications to include an Internet Gateway.
+   - The route table then sends `0.0.0.0/0` traffic to the Internet Gateway.

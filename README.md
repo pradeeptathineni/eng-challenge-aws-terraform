@@ -113,7 +113,7 @@ A simple AWS infrastructure challenge built with Terraform and developed step by
    aws s3 ls
    ```
 
-1. Plan and deploy the Terraform infrastructure.
+1. Initialize, validate, plan, and apply the Terraform infrastructure.
 
    ```bash
    make plan

@@ -30,6 +30,10 @@ This document serves to supply all resources that went into developing this proj
 - [Terraform AWS provider subnet resource](https://registry.terraform.io/providers/hashicorp/aws/4.52.0/docs/resources/subnet.html)
 - [Terraform AWS provider AZs data source](https://registry.terraform.io/providers/hashicorp/aws/4.45.0/docs/data-sources/availability_zones)
 - [Terraform for_each](https://developer.hashicorp.com/terraform/language/meta-arguments/for_each)
+- [AWS VPC internet gateway](https://docs.aws.amazon.com/vpc/latest/userguide/VPC_Internet_Gateway.html)
+- [AWS VPC route tables](https://docs.aws.amazon.com/vpc/latest/userguide/VPC_Route_Tables.html)
+- [Terraform AWS provider route](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/route)
+- [Terraform AWS provider route table association](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/route_table_association)
 
 ### Influences
 
