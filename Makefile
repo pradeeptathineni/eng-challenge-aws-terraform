@@ -15,10 +15,11 @@ TF := terraform -chdir=$(TF_DIR)
 
 AWS_LOGIN_SCRIPT := scripts/aws-login.sh
 AWS_CONTEXT_SCRIPT := scripts/aws-context.sh
+VERIFY_SCRIPT := scripts/verify.sh
 
 .DEFAULT_GOAL := help
 
-.PHONY: help tools login auth shell-validate fmt fmt-check init validate check plan plan-show apply destroy output state-list state-show clean
+.PHONY: help tools login auth shell-validate fmt fmt-check init validate check plan plan-show apply verify destroy output state-list state-show clean
 
 
 ##@ Workflows
@@ -52,6 +53,11 @@ apply: ## Verify AWS identity and apply the saved Terraform plan
 		rm -f $(PLAN_PATH); \
 		exit $$status
 
+verify: ## Verify the deployed application end to end
+	@$(MAKE) auth
+	@$(MAKE) init
+	@$(VERIFY_SCRIPT)
+
 destroy: ## Verify AWS identity and destroy managed infrastructure
 	@rm -f $(PLAN_PATH)
 	@$(MAKE) auth
@@ -73,10 +79,12 @@ help: ## Show available commands
 
 tools: ## Check required local tools and show their versions
 	@command -v bash >/dev/null 2>&1 || { echo "ERROR: Bash was not found"; exit 1; }
+	@command -v curl >/dev/null 2>&1 || { echo "ERROR: curl was not found"; exit 1; }
 	@command -v git >/dev/null 2>&1 || { echo "ERROR: Git was not found"; exit 1; }
 	@command -v aws >/dev/null 2>&1 || { echo "ERROR: AWS CLI was not found"; exit 1; }
-	@command -v terraform >/dev/null 2>&1 || { echo "ERROR: Terraform was not found"; exit 1; }
+	@command -v terraform >/dev/null 2>&1 || { echo "ERROR: Terraform CLI was not found"; exit 1; }
 	@echo "Bash:      $$(bash --version | head -n 1)"
+	@echo "curl:      $$(curl --version | head -n 1)"
 	@echo "Git:       $$(git --version)"
 	@echo "AWS:       $$(aws --version 2>&1)"
 	@echo "Terraform: $$(terraform version | head -n 1)"

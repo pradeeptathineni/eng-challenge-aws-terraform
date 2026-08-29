@@ -189,3 +189,7 @@ This document serves to tell this project's engineering story chronologically an
    - Terraform-managed private key material is acceptable for this disposable challenge but would be replaced with managed certificate issuance in production
 
    ### Stable v1 of complete architecture has been realized!
+
+1. **Deployed resources shouldn't just look pretty, they should mean something**
+   - A script verify.sh helps the deployer verify that infrastructure semantics are as we would expect.
+   - Becomes another useful make workflow command.

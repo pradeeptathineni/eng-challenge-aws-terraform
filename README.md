@@ -36,6 +36,7 @@ An AWS infrastructure challenge built with Terraform and developed step by step 
 - `make check` — Run shell syntax, Terraform formatting, and Terraform validation checks
 - `make plan` — Run project checks, verify AWS identity, initialize Terraform, and create a saved deployment plan
 - `make apply` — Verify AWS identity and apply the previously saved plan
+- `make verify` — Verify target health, HTTP-to-HTTPS redirection, and the deployed application response
 - `make destroy` — Verify AWS identity and destroy the managed infrastructure
 
 #### Helpers
@@ -114,6 +115,12 @@ An AWS infrastructure challenge built with Terraform and developed step by step 
    make state-show RESOURCE=<address>
    ```
 
+1. Verify infrastructure semantics.
+
+   ```bash
+   make verify
+   ```
+
 1. Tear down the deployment when finished.
 
    ```bash
@@ -136,7 +143,7 @@ An AWS infrastructure challenge built with Terraform and developed step by step 
 - Terraform initialization without backend access
 - Terraform configuration validation
 
-> CI does not currently require AWS credentials or access to deployed infrastructure or Terraform state.
+> Deployment verification is currently run locally with `make verify`; CI remains limited to static checks until authenticated AWS access is introduced.
 
 ---
 
