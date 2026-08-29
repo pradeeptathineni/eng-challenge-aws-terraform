@@ -2,59 +2,17 @@
 
 ## Description
 
-A simple AWS infrastructure challenge built with Terraform and developed step by step with CI/CD from the start. Github and this README will display my incremental process and decisions in evolving the architecture to support this simple AWS infrastructure. The goal is to meet the required architecture cleanly with CI/CD from the start and with extensibility in mind, while keeping the code, automation, and documentation easy to understand.
+An AWS infrastructure challenge built with Terraform and developed step by step with CI/CD from the start. Github and this README display the incremental process and decisions in evolving the architecture to support this simple AWS infrastructure. The goal is to meet the required architecture cleanly, with CI/CD and extensibility in mind from the start, while keeping the code, automation, and documentation easy to understand and reproduce.
 
 ---
 
-## AWS Architecture
+## Architecture
 
-> All resources are named using the `<prefix>`, defined by `resource_prefix` in [terraform/locals.tf](terraform/locals.tf).
+> See [docs/architecture.md](docs/architecture.md) for project architecture.
 
-### VPC
+> See [docs/engineering-decisions.md](docs/engineering-decisions.md) for architectural decision process.
 
-- `<prefix>-vpc` — `10.0.0.0/16`
-
-### Subnets
-
-- Two public subnets in different availability zones
-  - `<prefix>-subnet-public-1` — `10.0.1.0/24`
-  - `<prefix>-subnet-public-2` — `10.0.2.0/24`
-- Two private subnets in different availability zones
-  - `<prefix>-subnet-private-1` — `10.0.30.0/24`
-  - `<prefix>-subnet-private-2` — `10.0.40.0/24`
-
-### Application Load Balancer
-
-- Internet-facing
-- Deployed across the public subnets
-- Accepts HTTP on port `80`
-- Accepts HTTPS on port `443`
-- Terminates HTTPS using a self-signed certificate
-- Forwards application traffic to the EC2 instance
-
-### EC2
-
-- One instance in a private subnet
-- Runs a simple web server
-- Receives application traffic from the load balancer
-
-### Security groups
-
-- `<prefix>-sg-alb`
-  - inbound HTTP `80` from `0.0.0.0/0`
-  - inbound HTTPS `443` from `0.0.0.0/0`
-  - outbound HTTP `80` to `<prefix>-sg-ec2`
-- `<prefix>-sg-ec2`
-  - inbound HTTP `80` from `<prefix>-sg-alb`
-  - inbound SSH `22` from `10.0.0.0/16`
-  - outbound traffic allowed
-
-### Terraform outputs
-
-- ALB DNS name
-- EC2 private IP address
-
-> See [DevOpsChallenge.pdf](DevOpsChallenge.pdf) for original architecture reference.
+> See [DevOpsChallenge.pdf](DevOpsChallenge.pdf) for original architecture criteria.
 
 ---
 
@@ -153,7 +111,7 @@ A simple AWS infrastructure challenge built with Terraform and developed step by
    make destroy
    ```
 
-### CI
+### Continuous Integration
 
 > GitHub Actions runs automatically on pushes and pull requests to `main` using the same `make check` workflow available locally.
 
@@ -170,12 +128,6 @@ A simple AWS infrastructure challenge built with Terraform and developed step by
 
 ---
 
-## Engineering Decisions
-
-See [docs/engineering-decisions.md](docs/engineering-decisions.md)
-
----
-
 ## References
 
-See [docs/references.md](docs/references.md)
+> See [docs/references.md](docs/references.md) for referenced material.
