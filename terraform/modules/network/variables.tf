@@ -3,8 +3,8 @@
 # References:
 # Terraform variables
 
-variable "project_name" {
-  description = "Project name used when naming network resources"
+variable "resource_prefix" {
+  description = "Prefix used when naming network resources"
   type        = string
 }
 

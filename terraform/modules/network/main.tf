@@ -51,7 +51,7 @@ resource "aws_vpc" "this" {
   enable_dns_hostnames = true
 
   tags = {
-    Name = "${var.project_name}-vpc"
+    Name = "${var.resource_prefix}-vpc"
   }
 }
 
@@ -63,7 +63,7 @@ resource "aws_subnet" "public" {
   availability_zone = each.value.availability_zone
 
   tags = {
-    Name = "${var.project_name}-subnet-${each.key}"
+    Name = "${var.resource_prefix}-subnet-${each.key}"
     Tier = "public"
   }
 }
@@ -76,7 +76,7 @@ resource "aws_subnet" "private" {
   availability_zone = each.value.availability_zone
 
   tags = {
-    Name = "${var.project_name}-subnet-${each.key}"
+    Name = "${var.resource_prefix}-subnet-${each.key}"
     Tier = "private"
   }
 }
