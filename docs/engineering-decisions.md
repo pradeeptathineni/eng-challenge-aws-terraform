@@ -188,8 +188,19 @@ This document serves to tell this project's engineering story chronologically an
    - Reference: [AWS ALB security policies](https://docs.aws.amazon.com/elasticloadbalancing/latest/application/describe-ssl-policies.html)
    - Terraform-managed private key material is acceptable for this disposable challenge but would be replaced with managed certificate issuance in production
 
-   ### Stable v1 of complete architecture has been realized!
+   ### Stable v1 of complete architecture (local backend) has been realized!
 
 1. **Deployed resources shouldn't just look pretty, they should mean something**
    - A script verify.sh helps the deployer verify that infrastructure semantics are as we would expect.
    - Becomes another useful make workflow command.
+
+1. **Centralize configuration**
+   - Shared project settings live in `config/project.tfvars`, while main-stack deployment choices live in `config/stack.tfvars`.
+   - Centralized configuration best enables users to configure what they want how they want.
+   - It also minimized repeating configuration values between related deployments, such as our main Terraform and the optional remote backend bootstrap Terraform.
+
+1. **Enable options for local and remote Terraform backends**
+   - The best practice for any good Terraform architecture is to employ a remote backend, where the state can cozily live in mindful version control.
+   - Sometimes we won't want that, so the architecture for the simple project still defaults to a local backend.
+
+   ### Stable v2 of complete architecture (local OR remote backend) has been realized!

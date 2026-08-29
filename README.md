@@ -8,17 +8,17 @@ An AWS infrastructure challenge built with Terraform and developed step by step 
 
 ## Architecture
 
-> See [docs/architecture.md](docs/architecture.md) for project architecture.
+> See [docs/architecture.md](docs/architecture.md) for complete project architecture.
 
-> See [docs/engineering-decisions.md](docs/engineering-decisions.md) for architectural decision process.
+> See [docs/engineering-decisions.md](docs/engineering-decisions.md) for architectural decision process from start to finish.
 
-> See [DevOpsChallenge.pdf](DevOpsChallenge.pdf) for original architecture criteria.
+> See [docs/DevOpsChallenge.pdf](docs/DevOpsChallenge.pdf) for original architecture criteria.
 
 ---
 
 ## Configuration
 
-> Configurable deployment settings are centralized under [`config/`](config/).
+Configurable deployment settings are centralized under [`config/`](config/).
 
 - [`config/project.tfvars`](config/project.tfvars) — settings shared by the main stack and optional state bootstrap
   - Project identity
@@ -41,18 +41,39 @@ An AWS infrastructure challenge built with Terraform and developed step by step 
 - Bash ~ from [Git Bash](https://git-scm.com/install/windows) for Windows
 - GNU Make ~ from [Chocolatey](https://community.chocolatey.org/packages/make) for Windows
 
+### State Modes
+
+The main Terraform stack supports either local or remote state without changing the infrastructure configuration.
+
+- **Local state** — default mode with no additional setup; Terraform state remains on the local machine
+- **Remote state** — optional mode using a separately bootstrapped S3 bucket with versioning, server-side encryption, blocked public access, disabled ACLs, and native S3 state locking
+
+The remote backend is created independently under [`bootstrap/`](bootstrap/) because Terraform backend infrastructure must exist before the main stack can use it.
+
+[`terraform/s3-backend.tf.example`](terraform/s3-backend.tf.example) defines the optional S3 backend. The active backend selection is handled through the state workflows below, allowing existing state to migrate between local and S3 storage.
+
+The bootstrap configuration keeps its own state locally. Only the main infrastructure state is migrated to S3.
+
 ### Commands
 
-> The Makefile provides higher-level developer workflows for robust execution and focused helper commands for individual operations.
+The Makefile provides higher-level developer workflows for robust execution and focused helper commands for individual operations.
 
 #### Workflows
 
 - `make login` — Log into AWS and verify the active identity
-- `make check` — Run shell syntax, Terraform formatting, and Terraform validation checks
-- `make plan` — Run project checks, verify AWS identity, initialize Terraform, and create a saved deployment plan
-- `make apply` — Verify AWS identity and apply the previously saved plan
-- `make verify` — Verify target health, HTTP-to-HTTPS redirection, and the deployed application response
-- `make destroy` — Verify AWS identity and destroy the managed infrastructure
+- `make check` — Run all static project checks
+- `make plan` — Run checks, verify AWS identity, initialize the selected backend, and create a saved Terraform plan
+- `make apply` — Verify AWS identity and apply the saved Terraform plan
+- `make verify` — Verify the deployed application end-to-end
+- `make destroy` — Verify AWS identity and destroy managed infrastructure
+
+#### State workflows
+
+- `make bootstrap-plan` — Create a saved plan for the optional remote state infrastructure
+- `make bootstrap-apply` — Apply the previously saved remote state infrastructure plan
+- `make bootstrap-destroy` — Just asserts manual destruction for S3 backend bucket
+- `make state-remote` — Enable S3 remote state and migrate existing local state when needed
+- `make state-local` — Enable local state and migrate existing remote state when needed
 
 #### Helpers
 
@@ -62,8 +83,8 @@ An AWS infrastructure challenge built with Terraform and developed step by step 
 - `make shell-validate` — Check Bash helper scripts for syntax errors
 - `make fmt` — Format all Terraform configuration
 - `make fmt-check` — Check Terraform formatting without changing files
-- `make init` — Initialize Terraform with the configured backend
-- `make validate` — Initialize without backend access and validate Terraform
+- `make init` — Initialize the selected Terraform state backend
+- `make validate` — Validate all Terraform configuration without backend access
 - `make plan-show` — Show the saved Terraform plan
 - `make output` — Show Terraform outputs from the current state
 - `make state-list` — List resources currently tracked by Terraform state
@@ -72,93 +93,145 @@ An AWS infrastructure challenge built with Terraform and developed step by step 
 
 ### Running
 
-0. Configure your AWS CLI with the proper credentials using any of these methods if you haven't already.
+#### 1. Configure AWS access
 
-   ```bash
-   # IAM Identity Center / SSO
-   aws configure sso --profile <aws-profile>
+Configure the AWS CLI using an appropriate authentication method if needed.
 
-   # AWS local development login
-   aws configure set region <aws-region> --profile <aws-profile>
+```bash
+# IAM Identity Center / SSO
+aws configure sso --profile <aws-profile>
 
-   # Long-lived IAM access keys if required
-   aws configure --profile <aws-profile>
-   ```
+# AWS local development login
+aws configure set region <aws-region> --profile <aws-profile>
 
-1. Set AWS_PROFILE to the profile configured to authenticate you to the correct target AWS account.
+# Long-lived IAM access keys if required
+aws configure --profile <aws-profile>
+```
 
-   ```bash
-   export AWS_PROFILE=<aws-profile>
+Select the AWS profile for the deployment:
 
-   # sanity check
-   echo "$AWS_PROFILE"
-   ```
+```bash
+export AWS_PROFILE=<aws-profile>
 
-1. Log into AWS and authenticate its authority.
+# sanity check
+echo "$AWS_PROFILE"
+```
 
-   ```bash
-   make login
+Authenticate and verify the active AWS identity:
 
-   # sanity checks
-   make auth
-   aws s3 ls
-   ```
+```bash
+make login
 
-1. Run syntax, formatting, and validation checks on shell and Terraform code.
+# sanity check
+aws sts get-caller-identity
+```
 
-   ```bash
-   make check
-   ```
+#### 2. Review deployment configuration
 
-1. Initialize, validate, and plan the Terraform infrastructure.
+Shared project settings and main-stack infrastructure settings are defined under [`config/`](config/):
 
-   ```bash
-   make plan
+```text
+config/
+    project.tfvars
+    stack.tfvars
+```
 
-   # sanity check
-   make plan-show
-   ```
+Modify these files before planning if different project naming, AWS region, network ranges, or web EC2 sizing are required.
 
-1. Apply the Terraform infrastructure.
+#### 3. Choose a state backend mode
 
-   ```bash
-   make apply
+Local state backend is the default and requires no additional setup (can move on to next step).
 
-   # sanity checks
-   make output
-   make state-list
-   make state-show RESOURCE=<address>
-   ```
+To use protected S3 remote state backend instead, first bootstrap the backend into existence:
 
-1. Verify infrastructure semantics.
+```bash
+make bootstrap-plan
+make bootstrap-apply
+```
 
-   ```bash
-   make verify
-   ```
+Then enable remote state:
 
-1. Tear down the deployment when finished.
+```bash
+make state-remote
+```
 
-   ```bash
-   make destroy
+Existing local state is migrated when applicable. A fresh deployment initializes directly against the S3 backend.
 
-   # sanity completion
-   make clean
-   ```
+To migrate the main stack back to local state:
+
+```bash
+make state-local
+```
+
+You are able to go vice-versa as needed.
+
+#### 4. Validate and plan
+
+Run the complete static validation workflow:
+
+```bash
+make check
+```
+
+Create and review a saved Terraform plan:
+
+```bash
+make plan
+make plan-show
+```
+
+#### 5. Deploy
+
+Apply the exact saved plan:
+
+```bash
+make apply
+```
+
+Inspect the deployed Terraform state and required outputs:
+
+```bash
+make output
+make state-list
+make state-show RESOURCE='<address>'
+```
+
+#### 6. Verify
+
+Verify the deployed infrastructure and application end-to-end:
+
+```bash
+make verify
+```
+
+#### 7. Tear down
+
+Destroy the main infrastructure when finished:
+
+```bash
+make destroy
+make clean
+```
+
+Remote state infrastructure is intentionally managed separately from the main stack. Use the dedicated bootstrap workflow only when the S3 backend itself should also be removed.
 
 ### Continuous Integration
 
-> GitHub Actions runs automatically on pushes and pull requests to `main` using the same `make check` workflow available locally.
+GitHub Actions runs automatically on pushes and pull requests to `main` using the same `make check` workflow available locally.
 
-> Terraform `1.16.0` is installed explicitly in CI to keep automation aligned with local development.
+Terraform `1.16.0` is installed explicitly in CI to keep automation aligned with local development.
 
 #### Current static checks include:
 
 - Bash helper script syntax
 - Terraform formatting
+- Shared deployment configuration formatting
 - Terraform initialization without backend access
-- Terraform configuration validation
+- Main stack and bootstrap configuration validation
 
-> Deployment verification is currently run locally with `make verify`; CI remains limited to static checks until authenticated AWS access is introduced.
+CI currently requires neither AWS credentials nor access to Terraform state or deployed infrastructure.
+
+Authenticated remote-state planning can be added separately using GitHub Actions OIDC in the future.
 
 ---
 

@@ -2,9 +2,18 @@
 
 This document serves to detail all AWS resources that are defined by and deployable from this project's Terraform infrastructure as code.
 
-> All resources are named using the `<prefix>`, defined by `resource_prefix` in [terraform/locals.tf](../terraform/locals.tf).
+> All resources are named using the `<prefix>`, defined by `resource_prefix` in [config/project.tfvars](../config/project.tfvars).
 
 ---
+
+### Terraform State
+
+- Local state is supported by default
+- Optional remote S3 bucket backend — `<prefix>-tfstate-<aws-account-id>`
+  - State stored under `<project_name>/terraform.tfstate`
+  - Versioning and server-side encryption enabled
+  - Public access blocked and object ACLs disabled
+  - Native S3 state locking enabled
 
 ### VPC — `<prefix>-vpc` — `10.0.0.0/16`
 
@@ -59,4 +68,4 @@ This document serves to detail all AWS resources that are defined by and deploya
 - `alb_dns_name` — ALB DNS name
 - `ec2_private_ip` — EC2 private IP address
 
-> See [DevOpsChallenge.pdf](DevOpsChallenge.pdf) for original architecture reference.
+> See [docs/DevOpsChallenge.pdf](../docs/DevOpsChallenge.pdf) for original architecture reference.

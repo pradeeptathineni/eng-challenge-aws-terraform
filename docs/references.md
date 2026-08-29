@@ -56,6 +56,19 @@ This document serves to supply all resources that went into developing this proj
 - [Terraform AWS provider load balancer listener](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/lb_listener)
 - [AWS ALB HTTPS listeners](https://docs.aws.amazon.com/elasticloadbalancing/latest/application/create-https-listener.html)
 - [AWS ALB certificates](https://docs.aws.amazon.com/elasticloadbalancing/latest/application/https-listener-certificates.html)
+- [Terraform input variables](https://developer.hashicorp.com/terraform/language/values/variables)
+- [Terraform local values](https://developer.hashicorp.com/terraform/language/block/locals)
+- [Terraform backend configuration](https://developer.hashicorp.com/terraform/language/backend)
+- [Terraform init command](https://developer.hashicorp.com/terraform/cli/commands/init)
+- [Terraform S3 backend](https://developer.hashicorp.com/terraform/language/backend/s3)
+- [AWS Terraform backend best practices](https://docs.aws.amazon.com/prescriptive-guidance/latest/terraform-aws-provider-best-practices/backend.html)
+- [AWS Terraform remote state security](https://docs.aws.amazon.com/prescriptive-guidance/latest/terraform-aws-provider-best-practices/security.html)
+- [Terraform AWS provider S3 bucket](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket)
+- [Terraform AWS provider S3 bucket versioning](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_versioning)
+- [Terraform AWS provider S3 bucket server-side encryption](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_server_side_encryption_configuration)
+- [Terraform AWS provider S3 public access block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_public_access_block)
+- [Terraform AWS provider S3 ownership controls](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_ownership_controls)
+- [AWS S3 Block Public Access](https://docs.aws.amazon.com/AmazonS3/latest/userguide/access-control-block-public-access.html)
 
 ### Architecture Influences
 

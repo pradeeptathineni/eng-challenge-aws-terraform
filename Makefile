@@ -48,7 +48,7 @@ check: ## Run all static project checks
 	@$(MAKE) fmt-check
 	@$(MAKE) validate
 
-plan: ## Run checks verify AWS identity and create a saved Terraform plan
+plan: ## Run checks, verify AWS identity, initialize the selected backend, and create a saved Terraform plan
 	@rm -f $(PLAN_PATH)
 	@$(MAKE) check
 	@$(MAKE) auth
@@ -111,7 +111,7 @@ bootstrap-apply: ## Apply the saved remote state infrastructure plan
 		rm -f $(BOOTSTRAP_PLAN_PATH); \
 		exit $$status
 
-bootstrap-destroy: ## Assert manual destruction for S3 backend bucket
+bootstrap-destroy: ## Just asserts manual destruction for S3 backend bucket
 	@echo
 	@echo "S3 backend is protected against programmatic destroy."
 	@echo "Manual destruction through console is the only option."
