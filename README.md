@@ -41,13 +41,6 @@ Configurable deployment settings are centralized under [`config/`](config/).
 - Bash ~ from [Git Bash](https://git-scm.com/install/windows) for Windows
 - GNU Make ~ from [Chocolatey](https://community.chocolatey.org/packages/make) for Windows
 
-### State Modes
-
-The main Terraform stack supports either local or remote state without changing the infrastructure configuration.
-
-- **Local state** — default mode with no additional setup; Terraform state remains on the local machine
-- **Remote state** — optional mode using a separately bootstrapped S3 bucket with versioning, server-side encryption, blocked public access, disabled ACLs, and native S3 state locking
-
 ### Commands
 
 The Makefile provides higher-level developer workflows for robust execution and focused helper commands for individual operations.
