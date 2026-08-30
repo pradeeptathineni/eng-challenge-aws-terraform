@@ -2,7 +2,7 @@
 
 This document serves to detail all AWS resources that are defined by and deployable from this project's Terraform infrastructure as code.
 
-> All resources are named using the `<prefix>`, defined by `resource_prefix` in [config/project.tfvars](../config/project.tfvars).
+All resources are named using the `<prefix>`, defined by `resource_prefix` in [config/project.tfvars](../config/project.tfvars).
 
 ---
 

@@ -2,7 +2,7 @@
 
 This document serves to tell this project's engineering story chronologically and cohesively; a lightweight ADR log.
 
-> The &#11088; symbol represents a responsible architecture addition that is not explicitly part of the original infrastructure criteria (see [DevOpsChallenge.pdf](../DevOpsChallenge.pdf)).
+The &#11088; symbol represents a responsible architecture addition that is not explicitly part of the original infrastructure criteria (see [docs/DevOpsChallenge.pdf](../docs/DevOpsChallenge.pdf)).
 
 ---
 
