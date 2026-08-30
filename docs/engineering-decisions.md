@@ -204,3 +204,9 @@ This document serves to tell this project's engineering story chronologically an
    - Sometimes we won't want that, so the architecture for the simple project still defaults to a local backend.
 
    ### Stable v2 of complete architecture (local OR remote backend) has been realized!
+
+1. **Complete end-to-end user control of all architecture**
+   - User is not forced to live with a S3 backend if they do so choose to use it but then need to remove it.
+   - The assertion for manual deletion made sense for security at first, but it's worth it to cover end-to-end creation and deletion programmatically.
+   - bootstrap-destroy completes the total removal.
+   - The shell script for backend-destroy.sh overrides the prevent_destroy flag by creating a temporary decommission_override.tf with the flag override which is used in the destroy process.

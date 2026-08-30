@@ -71,7 +71,7 @@ The Makefile provides higher-level developer workflows for robust execution and 
 
 - `make bootstrap-plan` — Create a saved plan for the optional remote state infrastructure
 - `make bootstrap-apply` — Apply the previously saved remote state infrastructure plan
-- `make bootstrap-destroy` — Just asserts manual destruction for S3 backend bucket
+- `make bootstrap-destroy` — Permanently remove remote state infrastructure after verifying the main stack has been destroyed
 - `make state-remote` — Enable S3 remote state and migrate existing local state when needed
 - `make state-local` — Enable local state and migrate existing remote state when needed
 
@@ -206,14 +206,28 @@ make verify
 
 #### 7. Tear down
 
-Destroy the main infrastructure when finished:
+_**(a) TYPICAL**_ — Destroy the main infrastructure:
 
 ```bash
 make destroy
+
+# optional: clean up generated remnants
+# excluding state and lock files
 make clean
 ```
 
-Remote state infrastructure is intentionally managed separately from the main stack. Use the dedicated bootstrap workflow only when the S3 backend itself should also be removed.
+_**(b) LAST CASE**_ — Destroy the main infrastructure and the bootstrap S3 backend infrastructure:
+
+```bash
+make destroy
+make bootstrap-destroy
+
+# optional: clean up everything
+# including state and lock files
+make deep-clean
+```
+
+> **WARNING**: This action is irreversible and removes all retained Terraform state history.
 
 ### Continuous Integration
 

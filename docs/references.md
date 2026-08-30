@@ -69,6 +69,11 @@ This document serves to supply all resources that went into developing this proj
 - [Terraform AWS provider S3 public access block](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_public_access_block)
 - [Terraform AWS provider S3 ownership controls](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_ownership_controls)
 - [AWS S3 Block Public Access](https://docs.aws.amazon.com/AmazonS3/latest/userguide/access-control-block-public-access.html)
+- [Terraform lifecycle prevent_destroy](https://developer.hashicorp.com/terraform/language/meta-arguments/lifecycle#prevent_destroy)
+- [Terraform override files](https://developer.hashicorp.com/terraform/language/files/override)
+- [AWS S3 deleting object versions](https://docs.aws.amazon.com/AmazonS3/latest/userguide/DeletingObjectVersions.html)
+- [AWS CLI delete-object](https://docs.aws.amazon.com/cli/latest/reference/s3api/delete-object.html)
+- [AWS CLI emptying and deleting S3 buckets](https://docs.aws.amazon.com/AmazonS3/latest/userguide/GettingStartedS3CLI.html#delete-bucket)
 
 ### Architecture Influences
 

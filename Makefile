@@ -111,11 +111,10 @@ bootstrap-apply: ## Apply the saved remote state infrastructure plan
 		rm -f $(BOOTSTRAP_PLAN_PATH); \
 		exit $$status
 
-bootstrap-destroy: ## Just asserts manual destruction for S3 backend bucket
-	@echo
-	@echo "S3 backend is protected against programmatic destroy."
-	@echo "Manual destruction through console is the only option."
-	@echo
+bootstrap-destroy: ## Permanently destroy remote state after the main stack is empty
+	@$(MAKE) auth
+	@$(MAKE) init
+	@$(BOOTSTRAP_DESTROY_SCRIPT)
 
 state-local: ## Enable local state and migrate existing remote state when needed
 	@$(MAKE) auth
@@ -208,3 +207,41 @@ clean: ## Remove generated Terraform working files without deleting state
 	@rm -f $(TF_DIR)/crash.log $(TF_DIR)/crash.*.log
 	@rm -f $(BOOTSTRAP_DIR)/crash.log $(BOOTSTRAP_DIR)/crash.*.log
 	@echo "Terraform working files removed"
+
+deep-clean: ## Remove all generated files and local state after full teardown
+	@test ! -f "$(TF_DIR)/s3-backend.tf" || { \
+		echo "ERROR: Remote state is still enabled"; \
+		echo "Run 'make bootstrap-destroy' first"; \
+		exit 1; \
+	}
+
+	@if [ -f "$(TF_DIR)/terraform.tfstate" ]; then \
+		main_state="$$(terraform -chdir=$(TF_DIR) state list 2>/dev/null)"; \
+		if [ -n "$$main_state" ]; then \
+			echo "ERROR: Main Terraform state still contains resources"; \
+			echo "$$main_state"; \
+			echo "Run 'make destroy' first"; \
+			exit 1; \
+		fi; \
+	fi
+
+	@if [ -f "$(BOOTSTRAP_DIR)/terraform.tfstate" ]; then \
+		bootstrap_state="$$(terraform -chdir=$(BOOTSTRAP_DIR) state list 2>/dev/null)"; \
+		if [ -n "$$bootstrap_state" ]; then \
+			echo "ERROR: Bootstrap Terraform state still contains resources"; \
+			echo "$$bootstrap_state"; \
+			echo "Run 'make bootstrap-destroy' first"; \
+			exit 1; \
+		fi; \
+	fi
+
+	@$(MAKE) clean
+
+	@rm -f $(TF_DIR)/terraform.tfstate
+	@rm -f $(TF_DIR)/terraform.tfstate.*
+	@rm -f $(TF_DIR)/.terraform.tfstate.lock.info
+	@rm -f $(BOOTSTRAP_DIR)/terraform.tfstate
+	@rm -f $(BOOTSTRAP_DIR)/terraform.tfstate.*
+	@rm -f $(BOOTSTRAP_DIR)/.terraform.tfstate.lock.info
+
+	@echo "Terraform working files and empty local state removed"
