@@ -77,6 +77,7 @@ The Makefile provides higher-level developer workflows for robust execution and 
 - `make state-list` — List resources currently tracked by Terraform state
 - `make state-show` — Show one resource from Terraform state using `RESOURCE=<address>`
 - `make clean` — Remove generated Terraform working files without deleting state
+- `make deep-clean` — Remove all generated files and local state after full teardown
 
 ### Running
 
