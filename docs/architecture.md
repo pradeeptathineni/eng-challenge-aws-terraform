@@ -14,6 +14,15 @@ This document serves to detail all AWS resources that are defined by and deploya
   - Versioning and server-side encryption enabled
   - Public access blocked and object ACLs disabled
   - Native S3 state locking enabled
+- The remote backend is created independently under [`bootstrap/`](../bootstrap/)
+  - Terraform backend infrastructure must exist before the main stack can use it
+  - [`terraform/s3-backend.tf.example`](../terraform/s3-backend.tf.example) defines the optional S3 backend consumed by the main stack
+  - The active backend selection is handled through the state workflows
+    - Makefile's `state-local` — configure for local backend
+    - Makefile's `state-remote` - configure for remote backend
+    - The state workflows allow state to migrate between local and S3 storage
+  - The bootstrap remote backend configuration keeps its own state locally
+  - Only the main infrastructure state is migrated to S3 when it exists
 
 ### VPC — `<prefix>-vpc` — `10.0.0.0/16`
 

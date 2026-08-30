@@ -48,12 +48,6 @@ The main Terraform stack supports either local or remote state without changing 
 - **Local state** — default mode with no additional setup; Terraform state remains on the local machine
 - **Remote state** — optional mode using a separately bootstrapped S3 bucket with versioning, server-side encryption, blocked public access, disabled ACLs, and native S3 state locking
 
-The remote backend is created independently under [`bootstrap/`](bootstrap/) because Terraform backend infrastructure must exist before the main stack can use it.
-
-[`terraform/s3-backend.tf.example`](terraform/s3-backend.tf.example) defines the optional S3 backend. The active backend selection is handled through the state workflows below, allowing existing state to migrate between local and S3 storage.
-
-The bootstrap configuration keeps its own state locally. Only the main infrastructure state is migrated to S3.
-
 ### Commands
 
 The Makefile provides higher-level developer workflows for robust execution and focused helper commands for individual operations.
