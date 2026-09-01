@@ -93,3 +93,4 @@ This document serves to supply all resources that went into developing this proj
 - [AWS ALB security groups](https://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-update-security-groups.html)
 - [AL2023 on Amazon EC2](https://docs.aws.amazon.com/linux/al2023/ug/ec2.html)
 - [AWS ALB security policies](https://docs.aws.amazon.com/elasticloadbalancing/latest/application/describe-ssl-policies.html)
+- [awesome-readme GitHub](https://github.com/matiassingers/awesome-readme)
