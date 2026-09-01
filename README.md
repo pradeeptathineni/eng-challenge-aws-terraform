@@ -159,7 +159,7 @@ Run `make help` at any time for the current command list.
 | `make e2e-remote-deploy` | Configure, authenticate, deploy with remote S3 state, and verify                                |
 | `make e2e-destroy`       | Destroy infrastructure, remote-state infrastructure when present, and local generated artifacts |
 
-</details><br>
+</details>
 
 <details>
 <summary><strong>Main Infrastructure Workflows</strong></summary>
@@ -173,7 +173,7 @@ Run `make help` at any time for the current command list.
 | `make verify`  | Verify the deployed infrastructure and application end-to-end                             |
 | `make destroy` | Verify AWS access and destroy the main infrastructure                                     |
 
-</details><br>
+</details>
 
 <details>
 <summary><strong>State Backend Workflows</strong></summary>
@@ -187,7 +187,7 @@ Run `make help` at any time for the current command list.
 | `make backend-remote`      | Enable S3 remote state and migrate existing local state when needed              |
 | `make backend-local`       | Enable local state and migrate existing remote state when needed                 |
 
-</details><br>
+</details>
 
 <details>
 <summary><strong>Focused Helpers</strong></summary>
@@ -210,7 +210,7 @@ Run `make help` at any time for the current command list.
 | `make clean`                           | Remove generated Terraform working files without deleting state |
 | `make deep-clean`                      | Remove generated files and empty local state after teardown     |
 
-</details><br>
+</details>
 
 ---
 
@@ -260,7 +260,7 @@ make <E2E command> AUTO=1
 
 For cleanup without destroying managed infrastructure, use `make clean`. After infrastructure has already been fully removed, `make deep-clean` can remove remaining local Terraform state and generated artifacts.
 
-</details><br>
+</details>
 
 <details>
 <summary><strong>Step-by-Step</strong></summary>
@@ -391,7 +391,7 @@ Remove generated artifacts and empty local state files:
 make deep-clean
 ```
 
-</details><br>
+</details>
 
 ---
 
