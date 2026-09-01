@@ -56,14 +56,14 @@ flowchart LR
         direction LR
 
         subgraph PUBLIC["2 Public Subnets / 2 AZs"]
-            ALB["Application Load Balancer<br/>HTTP 80 → HTTPS 443<br/>TLS termination"]
+            ALB["Application Load Balancer - HTTP 80 to HTTPS 443 - TLS termination"]
         end
 
         subgraph PRIVATE["2 Private Subnets / 2 AZs"]
-            EC2["Private EC2 Web Server<br/>No public IP"]
+            EC2["Private EC2 Web Server - No public IP"]
         end
 
-        ALB -->|"HTTP 80"| EC2
+        ALB -->|HTTP 80| EC2
     end
 
     INTERNET --> ALB
