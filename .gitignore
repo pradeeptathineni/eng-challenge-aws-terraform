@@ -49,3 +49,6 @@ terraform.rc
 
 # Generated remote backend selection
 terraform/s3-backend.tf
+
+# macOS Finder metadata
+.DS_Store
