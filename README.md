@@ -48,26 +48,7 @@ The commit history and supporting documentation preserve that progression and th
 
 ## Architecture
 
-```mermaid
-flowchart LR
-    INTERNET((Internet))
-
-    subgraph VPC["VPC 10.0.0.0/16"]
-        direction LR
-
-        subgraph PUBLIC["2 Public Subnets / 2 AZs"]
-            ALB["Application Load Balancer - HTTP 80 to HTTPS 443 - TLS termination"]
-        end
-
-        subgraph PRIVATE["2 Private Subnets / 2 AZs"]
-            EC2["Private EC2 Web Server - No public IP"]
-        end
-
-        ALB -->|HTTP 80| EC2
-    end
-
-    INTERNET --> ALB
-```
+![Architecture Diagram](docs/architecture-diagram.png)
 
 <details>
 <summary><strong>Main Terraform Configuration</strong></summary>
