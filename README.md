@@ -50,8 +50,7 @@ The commit history and supporting documentation preserve that progression and th
 
 ![Architecture Diagram](docs/architecture-diagram.png)
 
-<details>
-<summary><strong>Main Terraform Configuration</strong></summary>
+### Main Terraform Configuration
 
 The default main-stack configuration includes:
 
@@ -65,10 +64,7 @@ The default main-stack configuration includes:
 - Security-group boundaries between the ALB and EC2 workload
 - `alb_dns_name` and `ec2_private_ip` Terraform outputs
 
-</details><br>
-
-<details>
-<summary><strong>Backend State Terraform Configuration</strong></summary>
+### Backend State Terraform Configuration
 
 The main stack supports either local or remote state:
 
@@ -83,8 +79,6 @@ The <a href="#continuous-integration">backend workflows</a> can migrate the main
 
 > [!IMPORTANT]
 > Terraform state can contain sensitive material, including the generated TLS private key, and is intentionally excluded from version control.
-
-</details><br>
 
 For deeper detail:
 
