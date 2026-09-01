@@ -19,7 +19,7 @@
   <a href="#continuous-integration">CI</a>
 </p>
 
-## Overview
+## 😮 Overview
 
 This repository implements the AWS infrastructure defined in the original engineering challenge using Terraform.
 
@@ -42,11 +42,11 @@ The commit history and supporting documentation preserve that progression and th
 > The self-signed TLS certificate is intentional and follows the original challenge requirements. Clients will not trust it like a publicly issued certificate.
 
 > [!CAUTION]
-> Deploying this project creates AWS resources that may incur charges.
+> 💸 Deploying this project creates AWS resources that may incur charges.
 
 ---
 
-## Architecture
+## 🏢 Architecture
 
 ![Architecture Diagram](docs/architecture-diagram.png)
 
@@ -88,7 +88,7 @@ The <a href="#continuous-integration">backend workflows</a> can migrate the main
 
 ---
 
-## Repository Layout
+## 📑 Repository Layout
 
 | Path                                       | Purpose                                                     |
 | ------------------------------------------ | ----------------------------------------------------------- |
@@ -102,7 +102,7 @@ The <a href="#continuous-integration">backend workflows</a> can migrate the main
 
 ---
 
-## Configuration
+## ⚙️ Configuration
 
 Deployment settings are publicly centralized under [`config/`](config/).
 
@@ -117,7 +117,7 @@ Do not place credentials, secrets, private keys, or other sensitive values in th
 
 ---
 
-## Requirements
+## ⬇️ Requirements
 
 `make tools` verifies the expected local toolset and required versions before an end-to-end deployment begins.
 
@@ -144,14 +144,14 @@ cd eng-challenge-aws-terraform
 
 ---
 
-## Commands
+## 💻 Commands
 
 The Makefile provides complete workflows for common operations while keeping each underlying operation independently available.
 
 Run `make help` at any time for the current command list.
 
 <details>
-<summary><strong>End-to-End Workflows</strong></summary>
+<summary><strong>🚀 End-to-End Workflows</strong></summary>
 
 | E2E Command              | Purpose                                                                                         |
 | ------------------------ | ----------------------------------------------------------------------------------------------- |
@@ -162,7 +162,7 @@ Run `make help` at any time for the current command list.
 </details>
 
 <details>
-<summary><strong>Main Infrastructure Workflows</strong></summary>
+<summary><strong>🛠️ Main Infrastructure Workflows</strong></summary>
 
 | Command        | Purpose                                                                                   |
 | -------------- | ----------------------------------------------------------------------------------------- |
@@ -176,7 +176,7 @@ Run `make help` at any time for the current command list.
 </details>
 
 <details>
-<summary><strong>State Backend Workflows</strong></summary>
+<summary><strong>🔐 State Backend Workflows</strong></summary>
 
 | Command                    | Purpose                                                                          |
 | -------------------------- | -------------------------------------------------------------------------------- |
@@ -190,7 +190,7 @@ Run `make help` at any time for the current command list.
 </details>
 
 <details>
-<summary><strong>Focused Helpers</strong></summary>
+<summary><strong>🔧 Focused Helpers</strong></summary>
 
 | Command                                | Purpose                                                         |
 | -------------------------------------- | --------------------------------------------------------------- |
@@ -217,7 +217,7 @@ Run `make help` at any time for the current command list.
 ## Execution
 
 <details>
-<summary><strong>End-to-End</strong></summary>
+<summary><strong>🚀 End-to-End</strong></summary>
 
 ### Local Deployment
 
@@ -247,7 +247,7 @@ make e2e-destroy
 
 `e2e-destroy` can be used after either local or remote deployment, really at any time.
 
-> **Warning:** Full teardown is irreversible. If remote state exists, its retained Terraform state history is permanently removed.
+> ⚠️ **Warning:** Full teardown is irreversible. If remote state exists, its retained Terraform state history is permanently removed.
 
 ### Non-Interactive E2E Execution
 
@@ -262,7 +262,7 @@ For cleanup without destroying managed infrastructure, use `make clean`. After i
 </details>
 
 <details>
-<summary><strong>Step-by-Step</strong></summary>
+<summary><strong>🧭 Step-by-Step</strong></summary>
 
 ### 1. Verify Local Tools
 
@@ -373,7 +373,7 @@ make destroy
 make bootstrap-destroy
 ```
 
-> **Warning:** Removing the remote backend permanently deletes its retained Terraform state history.
+> ⚠️ **Warning:** Removing the remote backend permanently deletes its retained Terraform state history.
 
 #### Final Cleanup
 
@@ -393,7 +393,7 @@ make deep-clean
 
 ---
 
-## Continuous Integration
+## 🔄 Continuous Integration
 
 GitHub Actions runs automatically on pushes and pull requests targeting `main`.
 
@@ -420,7 +420,7 @@ Authenticated remote planning or deployment can be added separately with GitHub 
 
 ---
 
-## Documentation
+## 📚 Documentation
 
 | Document                                                         | Purpose                                          |
 | ---------------------------------------------------------------- | ------------------------------------------------ |
@@ -431,6 +431,6 @@ Authenticated remote planning or deployment can be added separately with GitHub 
 
 ---
 
-## References
+## ❓ References
 
 See [`docs/references.md`](docs/references.md) for the AWS, Terraform, GitHub Actions, GNU Make, and other technical material referenced during implementation.
