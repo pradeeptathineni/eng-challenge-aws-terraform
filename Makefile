@@ -189,7 +189,9 @@ destroy: ## Verify AWS identity and destroy managed infrastructure
 	@rm -f $(PLAN_PATH)
 	@$(MAKE) auth
 	@$(MAKE) init
+	@$(MAKE) confirm CONFIRM=DESTROY
 	@$(TF) destroy \
+		-auto-approve \
 		-var-file=$(PROJECT_VARS) \
 		-var-file=$(STACK_VARS)
 
@@ -222,6 +224,7 @@ bootstrap-apply: ## Apply the saved remote state infrastructure plan
 bootstrap-destroy: ## Permanently destroy remote state after the main stack is empty
 	@$(MAKE) auth
 	@$(MAKE) init
+	@$(MAKE) confirm CONFIRM=DESTROY
 	@$(BOOTSTRAP_DESTROY_SCRIPT)
 
 backend-local: ## Enable local backend and migrate existing remote state when needed

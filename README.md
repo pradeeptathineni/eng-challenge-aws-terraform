@@ -51,8 +51,9 @@ The Makefile provides higher-level developer workflows for robust execution and 
 
 - `local-deploy` — Configure, authenticate, deploy with local state, and verify
 - `remote-deploy` — Configure, authenticate, deploy with remote S3 state, and verify
+- `full-destroy` — Destroy all infrastructure, state infrastructure, and local artifacts
 
-#### Main Workflows
+#### Main Infrastructure Workflows
 
 - `make login` — Log into AWS and verify the active identity
 - `make check` — Run all static project checks
@@ -61,7 +62,7 @@ The Makefile provides higher-level developer workflows for robust execution and 
 - `make verify` — Verify the deployed application end-to-end
 - `make destroy` — Verify AWS identity and destroy managed infrastructure
 
-#### State backend workflows
+#### State Backend Workflows
 
 - `make bootstrap-plan` — Create a saved plan for the optional remote state infrastructure
 - `make bootstrap-apply` — Apply the previously saved remote state infrastructure plan
@@ -94,11 +95,11 @@ Download this repo by cloning it with git to your machine.
 git clone https://github.com/pradeeptathineni/eng-challenge-aws-terraform.git
 ```
 
-### Performing an End-to-End Deployment
+### Performing an End-to-End (E2E) Deployment
 
-> Use commands with `AUTO=1` to avoid all user interaction. Requires AWS_PROFILE to be set. Run `export AWS_PROFILE=<aws-profile>`
+> Use E2E commands with `AUTO=1` to avoid all user interaction. Requires AWS_PROFILE to be set. Run `export AWS_PROFILE=<aws-profile>`
 
-#### (a) Complete local deployment
+#### (a) E2E local deployment
 
 For a complete deployment using local Terraform state:
 
@@ -106,7 +107,7 @@ For a complete deployment using local Terraform state:
 make local-deploy
 ```
 
-#### (b) Complete remote deployment
+#### (b) E2E remote deployment
 
 For a complete deployment using remote Terraform state with AWS S3 backend:
 
@@ -124,6 +125,14 @@ make state-list
 make state-show RESOURCE='<address>'
 make verify
 ```
+
+Use the following E2E command to destroy everything and fully clean the repo:
+
+```bash
+make full-destroy
+```
+
+> **WARNING**: This action is irreversible and removes all retained Terraform state history.
 
 ### Performing a Step-by-Step Deployment
 
