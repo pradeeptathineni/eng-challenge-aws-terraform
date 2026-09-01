@@ -13,13 +13,20 @@
 # AWS CLI describe-target-health
 # curl certificate verification
 
+# Define immediate exit behavior
+# -e, exit on any command non-zero exit code
+# -u, exit on not defined variable reference
+# -o pipefail, exit on any non-zero exit code within a pipeline
 set -euo pipefail
 
+# Disable the AWS CLI output pager
 export AWS_PAGER=""
 
+# Directories
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 TF_DIR="${ROOT_DIR}/terraform"
 
+# Content to be expected from web server response
 FULL_EXPECTED_CONTENT="""\
 <!doctype html>
 <html lang="en">
@@ -35,8 +42,9 @@ FULL_EXPECTED_CONTENT="""\
 """
 EXPECTED_CONTENT="Private EC2 web server is running"
 
+# Handle error with message and failure exit
 error() {
-    printf "ERROR: %s\n" "$1" >&2
+    printf 'ERROR: %s\n' "$1" >&2
     exit 1
 }
 
@@ -66,7 +74,7 @@ ALB_DNS="$(
     error "Terraform returned an empty ALB DNS name"
 
 # Affirm successful Terraform IaC for ALB
-printf ' ALB DNS:           %s\n' "${ALB_DNS}"
+printf 'ALB DNS:         %s\n' "${ALB_DNS}"
 
 # Read ec2_private_ip from Terraform state
 EC2_PRIVATE_IP="$(
@@ -78,7 +86,7 @@ EC2_PRIVATE_IP="$(
     error "Terraform returned an empty EC2 private IP"
 
 # Affirm successful Terraform IaC for EC2 instance
-printf ' EC2 Private IP:    %s\n' "${EC2_PRIVATE_IP}"
+printf 'EC2 Private IP:  %s\n' "${EC2_PRIVATE_IP}"
 
 # Find the load balancer represented by the Terraform output
 ALB_ARN="$(
@@ -103,26 +111,49 @@ TARGET_GROUP_ARN="$(
 [[ -n "${TARGET_GROUP_ARN}" && "${TARGET_GROUP_ARN}" != "None" ]] || \
     error "Could not find a target group for the application load balancer"
 
+# Wait criteria for all registered targets to become healthy
+MAX_ATTEMPTS=20
+WAIT_SECONDS=5
+
 # Confirm every registered target is healthy
-TARGET_STATES="$(
-    aws elbv2 describe-target-health \
-        --target-group-arn "${TARGET_GROUP_ARN}" \
-        --query 'TargetHealthDescriptions[].TargetHealth.State' \
-        --output text
-)"
+for ((attempt = 1; attempt <= MAX_ATTEMPTS; attempt++)); do
+    # Retrieve target states
+    TARGET_STATES="$(
+        aws elbv2 describe-target-health \
+            --target-group-arn "${TARGET_GROUP_ARN}" \
+            --query 'TargetHealthDescriptions[].TargetHealth.State' \
+            --output text
+    )"
 
-# Assert failure is no registered targets found
-[[ -n "${TARGET_STATES}" && "${TARGET_STATES}" != "None" ]] || \
-    error "No registered targets were found"
+    # Assert failure is no registered targets found
+    [[ -n "${TARGET_STATES}" && "${TARGET_STATES}" != "None" ]] || \
+        error "No registered targets were found"
 
-# Assert failure if any registered target is not "healthy"
-for state in ${TARGET_STATES}; do
-    [[ "${state}" == "healthy" ]] || \
-        error "A load balancer target is ${state}"
+    # Flag whether all targets have healthy state
+    ALL_HEALTHY=true
+    for state in ${TARGET_STATES}; do
+        if [[ "${state}" != "healthy" ]]; then
+            ALL_HEALTHY=false
+            break
+        fi
+    done
+
+    # Affirm all successful/healthy targets
+    if [[ "${ALL_HEALTHY}" == true ]]; then
+        break
+    fi
+
+    # Assert failure upon reaching max attempts for health check
+    if [[ "${attempt}" -eq "${MAX_ATTEMPTS}" ]]; then
+        error "Load balancer targets did not become healthy; tried for $(${MAX_ATTEMPTS}*${WAIT_SECONDS}) seconds"
+    fi
+
+    # Perform waiting
+    printf 'Target health:   %s, waiting...\n' "${TARGET_STATES}"
+    sleep "${WAIT_SECONDS}"
 done
 
-# Affirm successful AWS targets
-printf ' Target(s) health:  %s\n' "healthy"
+printf 'Target health:   healthy\n'
 
 # Confirm HTTP redirects to HTTPS
 read -r HTTP_STATUS REDIRECT_URL <<< "$(
@@ -145,7 +176,7 @@ read -r HTTP_STATUS REDIRECT_URL <<< "$(
     error "HTTP did not redirect to the expected HTTPS endpoint"
 
 # Affirm successful web server redirect
-printf ' HTTP redirect:     %s\n' "301 to HTTPS"
+printf 'HTTP redirect:   %s\n' "301 to HTTPS"
 
 # Verify the final HTTPS response
 # Certificate verification is skipped because the deployment uses a self-signed certificate
@@ -165,10 +196,11 @@ HTTPS_BODY="$(
     error "HTTPS endpoint did not return the expected application content"
 
 # Affirm successful HTTPS response
-printf ' HTTPS response:    %s\n' "expected content received"
+printf 'HTTPS response:  %s\n' "expected content received"
+
+# Affirm deployment verification completely successful
+printf 'Verification:    %s\n' "Deployment passed"
 
 # End verification message box
 printf '%s\n\n' "------------------------------------------------------------"
 
-# Affirm deployment verification completely successful
-printf "Deployment verification passed\n\n"

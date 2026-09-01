@@ -74,6 +74,13 @@ This document serves to supply all resources that went into developing this proj
 - [AWS S3 deleting object versions](https://docs.aws.amazon.com/AmazonS3/latest/userguide/DeletingObjectVersions.html)
 - [AWS CLI delete-object](https://docs.aws.amazon.com/cli/latest/reference/s3api/delete-object.html)
 - [AWS CLI emptying and deleting S3 buckets](https://docs.aws.amazon.com/AmazonS3/latest/userguide/GettingStartedS3CLI.html#delete-bucket)
+- [GNU Make recursive use](https://www.gnu.org/software/make/manual/html_node/MAKE-Variable.html)
+- [GNU Make variable propagation to recursive Make](https://www.gnu.org/software/make/manual/html_node/Variables_002fRecursion.html)
+- [AWS CLI configuration](https://docs.aws.amazon.com/cli/latest/reference/configure/)
+- [AWS CLI list-profiles](https://docs.aws.amazon.com/cli/latest/reference/configure/list-profiles.html)
+- [AWS CLI IAM Identity Center configuration](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-sso.html)
+- [AWS CLI local development login](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-sign-in.html)
+- [AWS CLI authentication and credentials](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-authentication.html)
 
 ### Architecture Influences
 

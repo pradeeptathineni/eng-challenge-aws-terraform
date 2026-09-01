@@ -38,7 +38,7 @@ While tfvars files are generally potentially sensitive, these ones are intention
 ### Requirements
 
 - [Git](https://git-scm.com/install/)
-- [AWS CLI `v2`](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html#getting-started-install-instructions)
+- [AWS CLI `v2.32.0+`](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html#getting-started-install-instructions)
 - [Terraform `1.16.0`](https://developer.hashicorp.com/terraform/install)
 - Bash ~ from [Git Bash](https://git-scm.com/install/windows) for Windows
 - GNU Make ~ from [Chocolatey](https://community.chocolatey.org/packages/make) for Windows
@@ -47,22 +47,27 @@ While tfvars files are generally potentially sensitive, these ones are intention
 
 The Makefile provides higher-level developer workflows for robust execution and focused helper commands for individual operations.
 
-#### Workflows
+#### End-to-End Workflows
+
+- `local-deploy` — Configure, authenticate, deploy with local state, and verify
+- `remote-deploy` — Configure, authenticate, deploy with remote S3 state, and verify
+
+#### Main Workflows
 
 - `make login` — Log into AWS and verify the active identity
 - `make check` — Run all static project checks
-- `make plan` — Run checks, verify AWS identity, initialize the selected backend, and create a saved Terraform plan
+- `make plan` — Run checks, verify AWS identity, initialize backend, and create/save Terraform plan
 - `make apply` — Verify AWS identity and apply the saved Terraform plan
 - `make verify` — Verify the deployed application end-to-end
 - `make destroy` — Verify AWS identity and destroy managed infrastructure
 
-#### State workflows
+#### State backend workflows
 
 - `make bootstrap-plan` — Create a saved plan for the optional remote state infrastructure
 - `make bootstrap-apply` — Apply the previously saved remote state infrastructure plan
 - `make bootstrap-destroy` — Permanently remove remote state infrastructure after verifying the main stack has been destroyed
-- `make state-remote` — Enable S3 remote state and migrate existing local state when needed
-- `make state-local` — Enable local state and migrate existing remote state when needed
+- `make backend-remote` — Enable S3 remote state and migrate existing local state when needed
+- `make backend-local` — Enable local state and migrate existing remote state when needed
 
 #### Helpers
 
@@ -81,24 +86,64 @@ The Makefile provides higher-level developer workflows for robust execution and 
 - `make clean` — Remove generated Terraform working files without deleting state
 - `make deep-clean` — Remove all generated files and local state after full teardown
 
-### Running
+### Getting Started
+
+Download this repo by cloning it with git to your machine.
+
+```bash
+git clone https://github.com/pradeeptathineni/eng-challenge-aws-terraform.git
+```
+
+### Performing an End-to-End Deployment
+
+> Use commands with `AUTO=1` to avoid all user interaction. Requires AWS_PROFILE to be set. Run `export AWS_PROFILE=<aws-profile>`
+
+#### (a) Complete local deployment
+
+For a complete deployment using local Terraform state:
+
+```bash
+make local-deploy
+```
+
+#### (b) Complete remote deployment
+
+For a complete deployment using remote Terraform state with AWS S3 backend:
+
+```bash
+make remote-deploy
+```
+
+#### Post-deployment
+
+You can use these commands to inspect and verify the deployment any time:
+
+```bash
+make output
+make state-list
+make state-show RESOURCE='<address>'
+make verify
+```
+
+### Performing a Step-by-Step Deployment
+
+#### 0. Check tool availability
+
+Ensure your CLI is installed with the needed tools.
+
+```bash
+make tools
+```
 
 #### 1. Configure AWS access
 
 Configure the AWS CLI using an appropriate authentication method if needed.
 
 ```bash
-# IAM Identity Center / SSO
-aws configure sso --profile <aws-profile>
-
-# AWS local development login
-aws configure set region <aws-region> --profile <aws-profile>
-
-# Long-lived IAM access keys if required
-aws configure --profile <aws-profile>
+make profile
 ```
 
-Select the AWS profile for the deployment:
+Set the AWS profile variable:
 
 ```bash
 export AWS_PROFILE=<aws-profile>
@@ -142,7 +187,7 @@ make bootstrap-apply
 Then enable remote state:
 
 ```bash
-make state-remote
+make backend-remote
 ```
 
 Existing local state is migrated when applicable. A fresh deployment initializes directly against the S3 backend.
@@ -150,12 +195,12 @@ Existing local state is migrated when applicable. A fresh deployment initializes
 To migrate the main stack back to local state:
 
 ```bash
-make state-local
+make backend-local
 ```
 
 You are able to go vice-versa as needed.
 
-#### 4. Validate and plan
+#### 4. Plan the infrastructure
 
 Run the complete static validation workflow:
 
@@ -167,10 +212,9 @@ Create and review a saved Terraform plan:
 
 ```bash
 make plan
-make plan-show
 ```
 
-#### 5. Deploy
+#### 5. Deploy the infrastructure
 
 Apply the exact saved plan:
 
@@ -194,9 +238,11 @@ Verify the deployed infrastructure and application end-to-end:
 make verify
 ```
 
-#### 7. Tear down
+### Tear Down
 
-_**(a) TYPICAL**_ — Destroy the main infrastructure:
+#### (a) Destroy main infrastructure
+
+Destroy all main infrastructure resources (TYPICAL).
 
 ```bash
 make destroy
@@ -206,7 +252,9 @@ make destroy
 make clean
 ```
 
-_**(b) LAST CASE**_ — Destroy the main infrastructure and the bootstrap S3 backend infrastructure:
+#### (b) Destroy main and remote backend infrastructure
+
+Destroy all main infrastructure and S3 backend infrastructure resources (LAST CASE).
 
 ```bash
 make destroy
@@ -225,7 +273,7 @@ GitHub Actions runs automatically on pushes and pull requests to `main` using th
 
 Terraform `1.16.0` is installed explicitly in CI to keep automation aligned with local development.
 
-#### Current static checks include:
+#### Current static checks
 
 - Bash helper script syntax
 - Terraform formatting

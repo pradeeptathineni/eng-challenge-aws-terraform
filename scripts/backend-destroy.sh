@@ -13,8 +13,13 @@
 # AWS S3 versioned object deletion
 # AWS CLI delete-objects
 
+# Define immediate exit behavior
+# -e, exit on any command non-zero exit code
+# -u, exit on not defined variable reference
+# -o pipefail, exit on any non-zero exit code within a pipeline
 set -euo pipefail
 
+# Disable the AWS CLI output pager
 export AWS_PAGER=""
 
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
@@ -77,11 +82,14 @@ printf '%s\n\n' "------------------------------------------------------------"
 printf 'The main Terraform stack is empty\n'
 printf 'This operation will permanently delete every stored state version\n\n'
 
-# Confirm destruction using bucket name
-printf 'Type the bucket name to confirm destruction:\n> '
-read -r CONFIRMATION
-[[ "${CONFIRMATION}" == "${STATE_BUCKET}" ]] || \
-    error "Confirmation did not match the state bucket name"
+# Confirm destruction using bucket name unless running automatically
+if [[ "${AUTO:-0}" != "1" ]]; then
+    printf 'Type the bucket name to confirm destruction:\n> '
+    read -r CONFIRMATION
+
+    [[ "${CONFIRMATION}" == "${STATE_BUCKET}" ]] || \
+        error "Confirmation did not match the state bucket name"
+fi
 
 # Move the empty main state away from S3 before destroying its backend
 if [[ -f "${BACKEND_FILE}" ]]; then

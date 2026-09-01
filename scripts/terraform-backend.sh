@@ -6,7 +6,7 @@
 # Local state is used when s3-backend.tf is absent
 # S3 state is used when s3-backend.tf is present
 
-# References
+# References:
 # Terraform init
 # Terraform partial backend configuration
 # Terraform S3 backend
@@ -24,11 +24,13 @@ BACKEND_TEMPLATE="${TF_DIR}/s3-backend.tf.example"
 BACKEND_FILE="${TF_DIR}/s3-backend.tf"
 BACKEND_DISABLED="${TF_DIR}/s3-backend.tf.disabled"
 
+# Handle error with message and failure exit
 error() {
     printf 'ERROR: %s\n' "$1" >&2
     exit 1
 }
 
+# Get specified key's value from project.tfvars
 read_project_value() {
     local key="$1"
     local value
@@ -96,17 +98,21 @@ case "${1:-}" in
         load_remote_backend
 
         aws s3api head-bucket \
-            --bucket "${STATE_BUCKET}" >/dev/null 2>&1 || \
+            --bucket "${STATE_BUCKET}" \
+            >/dev/null 2>&1 || \
             error "Remote state bucket was not found; deploy bootstrap first"
 
-        created_backend=false
+        # Remote state is already selected
+        if [[ -f "${BACKEND_FILE}" ]]; then
+            init_remote
 
-        if [[ ! -f "${BACKEND_FILE}" ]]; then
-            cp "${BACKEND_TEMPLATE}" "${BACKEND_FILE}"
-            created_backend=true
+            printf '\nRemote S3 state is already enabled\n\n'
+            exit 0
         fi
 
-        # Migrate existing local state when present
+        cp "${BACKEND_TEMPLATE}" "${BACKEND_FILE}"
+
+        # Migrate an existing local deployment
         if [[ -f "${TF_DIR}/terraform.tfstate" ]]; then
             if ! terraform -chdir="${TF_DIR}" init \
                 -migrate-state \
@@ -114,20 +120,22 @@ case "${1:-}" in
                 -backend-config="key=${STATE_KEY}" \
                 -backend-config="region=${AWS_REGION}"; then
 
-                if [[ "${created_backend}" == true ]]; then
-                    rm -f "${BACKEND_FILE}"
-                fi
-
+                rm -f "${BACKEND_FILE}"
                 error "Could not migrate Terraform state to S3"
             fi
+
+        # Attach a fresh deployment to the existing remote backend
         else
-            # Attach a fresh clone to an existing remote backend
-            terraform -chdir="${TF_DIR}" init \
+            if ! terraform -chdir="${TF_DIR}" init \
                 -reconfigure \
                 -input=false \
                 -backend-config="bucket=${STATE_BUCKET}" \
                 -backend-config="key=${STATE_KEY}" \
-                -backend-config="region=${AWS_REGION}"
+                -backend-config="region=${AWS_REGION}"; then
+
+                rm -f "${BACKEND_FILE}"
+                error "Could not initialize the S3 backend"
+            fi
         fi
 
         printf '\nRemote S3 state enabled\n\n'
