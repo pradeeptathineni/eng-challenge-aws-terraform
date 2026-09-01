@@ -212,48 +212,41 @@ The &#11088; symbol represents a responsible architecture addition that is not e
    - The shell script for backend-destroy.sh overrides the prevent_destroy flag by creating a temporary decommission_override.tf with the flag override which is used in the destroy process.
 
 1. **Complete end-to-end automation of deployments**
-
-- `local-deploy` and `remote-deploy` compose the same Make workflows available for individual execution rather than duplicating Terraform or AWS logic.
-- aws-profile script automates the user's need to configure and set AWS profile.
-- aws-login script now checks for user already logged in, so login is not repeated when workflows are rerun.
-- AWS profile selection is ephemeral and propagated only through the active deployment workflow.
-- Saved bootstrap and infrastructure plans remain visible and require explicit confirmation before application.
-- State selection is explicit so each complete deployment guarantees the local or remote backend mode named by the workflow.
-- All this just to enable the laziness itch to be as hands off as possible. But isn't that the whole point of devops and automation?
+   - `local-deploy` and `remote-deploy` compose the same Make workflows available for individual execution rather than duplicating Terraform or AWS logic.
+   - aws-profile script automates the user's need to configure and set AWS profile.
+   - aws-login script now checks for user already logged in, so login is not repeated when workflows are rerun.
+   - AWS profile selection is ephemeral and propagated only through the active deployment workflow.
+   - Saved bootstrap and infrastructure plans remain visible and require explicit confirmation before application.
+   - State selection is explicit so each complete deployment guarantees the local or remote backend mode named by the workflow.
+   - All this just to enable the laziness itch to be as hands off as possible. But isn't that the whole point of devops and automation?
 
 1. **Automate profile configuration**
-
-- Before I asked of the user to ensure their AWS profile is correctly set up.
-- aws-profile.sh checks, set up, and confirms all that now.
-- One more step towards more freedom.
+   - Before I asked of the user to ensure their AWS profile is correctly set up.
+   - aws-profile.sh checks, set up, and confirms all that now.
+   - One more step towards more freedom.
 
 1. **Robustly check all needed tools**
-
-- Some tools are version-agnostic, some are version-relevant, and all must be checked properly.
-- For versioned ones, knowing the tool name, needed version, execution command for version, and regex to get the version is useful.
-- Method to compare A.B.C, A.B, or even just major A versions is needed.
-- Checking tools before anything else ensures the user is set for proper deployments every time.
+   - Some tools are version-agnostic, some are version-relevant, and all must be checked properly.
+   - For versioned ones, knowing the tool name, needed version, execution command for version, and regex to get the version is useful.
+   - Method to compare A.B.C, A.B, or even just major A versions is needed.
+   - Checking tools before anything else ensures the user is set for proper deployments every time.
 
 1. **Deduplicated workflow logic and full auto**
-
-- `ORCHESTRATED=1` prevents repeated authentication, validation, and initialization once those prerequisites are already established.
-- `AUTO=1` supports fully non-interactive runs, while numbered step banners keep longer workflows readable.
+   - `ORCHESTRATED=1` prevents repeated authentication, validation, and initialization once those prerequisites are already established.
+   - `AUTO=1` supports fully non-interactive runs, while numbered step banners keep longer workflows readable.
 
 1. **Reuse credentials before starting new sessions**
+   - Authentication behavior is determined from the selected AWS profile rather than assuming one login method.
+   - Existing short-lived credentials are reused when they can still be resolved successfully.
+   - IAM Identity Center login is only invoked when reusable SSO credentials are unavailable, avoiding unnecessary browser prompts.
+   - Login remains separate from AWS account and principal validation so each concern can fail independently.
 
-- Authentication behavior is determined from the selected AWS profile rather than assuming one login method.
-- Existing short-lived credentials are reused when they can still be resolved successfully.
-- IAM Identity Center login is only invoked when reusable SSO credentials are unavailable, avoiding unnecessary browser prompts.
-- Login remains separate from AWS account and principal validation so each concern can fail independently.
-
-  ### Stable v3 of complete architecture (local/remote backend) with complete end-to-end automations has been realized!
+### Stable v3 of complete architecture (local/remote backend) with complete end-to-end automations has been realized!
 
 1. **Commenting is thorough and standard across all files**
-
-- Title; still working on it though.
+   - Title; still working on it though.
 
 1. **README is clear, structured, accurate, practical, and pretty**
-
-- As the guidance entrypoint to this project for the user, the README.md should consider all advantages.
-- Take inspiration and conventions from popular repos with nice READMEs.
-- Reference: [awesome-readme GitHub](https://github.com/matiassingers/awesome-readme)
+   - As the guidance entrypoint to this project for the user, the README.md should consider all advantages.
+   - Take inspiration and conventions from popular repos with nice READMEs.
+   - Reference: [awesome-readme GitHub](https://github.com/matiassingers/awesome-readme)
