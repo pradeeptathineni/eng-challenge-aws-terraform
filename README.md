@@ -80,7 +80,7 @@ The <a href="#continuous-integration">backend workflows</a> can migrate the main
 > [!IMPORTANT]
 > Terraform state can contain sensitive material, including the generated TLS private key, and is intentionally excluded from version control.
 
-For deeper detail:
+#### For deeper detail:
 
 - [`docs/architecture.md`](docs/architecture.md) — complete project architecture
 - [`docs/engineering-decisions.md`](docs/engineering-decisions.md) — engineering decisions throughout development
