@@ -246,6 +246,8 @@ The &#11088; symbol represents a responsible architecture addition that is not e
 - IAM Identity Center login is only invoked when reusable SSO credentials are unavailable, avoiding unnecessary browser prompts.
 - Login remains separate from AWS account and principal validation so each concern can fail independently.
 
+  ### Stable v3 of complete architecture (local/remote backend) with complete end-to-end automations has been realized!
+
 1. **Commenting is thorough and standard across all files**
 
 - Title; still working on it though.
