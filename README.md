@@ -247,8 +247,7 @@ make e2e-destroy
 
 `e2e-destroy` can be used after either local or remote deployment, really at any time.
 
-> [!WARNING]
-> Full teardown is irreversible. If remote state exists, its retained Terraform state history is permanently removed.
+> **Warning:** Full teardown is irreversible. If remote state exists, its retained Terraform state history is permanently removed.
 
 ### Non-Interactive E2E Execution
 
@@ -374,8 +373,7 @@ make destroy
 make bootstrap-destroy
 ```
 
-> [!WARNING]
-> Removing the remote backend permanently deletes its retained Terraform state history.
+> **Warning:** Removing the remote backend permanently deletes its retained Terraform state history.
 
 #### Final Cleanup
 
