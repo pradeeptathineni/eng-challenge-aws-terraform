@@ -249,3 +249,9 @@ The &#11088; symbol represents a responsible architecture addition that is not e
 1. **Commenting is thorough and standard across all files**
 
 - Title; still working on it though.
+
+1. **README is clear, structured, accurate, practical, and pretty**
+
+- As the guidance entrypoint to this project for the user, the README.md should consider all advantages.
+- Take inspiration and conventions from popular repos with nice READMEs.
+- Reference: [awesome-readme GitHub](https://github.com/matiassingers/awesome-readme)

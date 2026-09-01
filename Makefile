@@ -66,7 +66,7 @@ ORCHESTRATED ?= 0
 	help confirm step \
 	tools shell-validate fmt fmt-check validate check verify \
 	profile login auth \
-	local-deploy remote-deploy full-destroy \
+	e2e-local-deploy e2e-remote-deploy e2e-destroy \
 	init plan plan-show apply destroy \
 	bootstrap-plan bootstrap-plan-show bootstrap-apply bootstrap-destroy \
 	backend-local backend-remote \
@@ -76,7 +76,7 @@ ORCHESTRATED ?= 0
 
 ##@ End-to-end workflows
 
-local-deploy: ## Configure, authenticate, deploy with local state, and verify
+e2e-local-deploy: ## Configure, authenticate, deploy with local state, and verify
 	@set -e; \
 	export AUTO="$(AUTO)"; \
 	$(MAKE) step STEP="1. VERIFY TOOLS"; \
@@ -99,7 +99,7 @@ local-deploy: ## Configure, authenticate, deploy with local state, and verify
 	$(MAKE) step STEP="8. VERIFY DEPLOYMENT"; \
 	$(MAKE) verify
 
-remote-deploy: ## Configure, authenticate, deploy with remote S3 state, and verify
+e2e-remote-deploy: ## Configure, authenticate, deploy with remote S3 state, and verify
 	@set -e; \
 	export AUTO="$(AUTO)"; \
 	$(MAKE) step STEP="1. VERIFY TOOLS"; \
@@ -127,7 +127,7 @@ remote-deploy: ## Configure, authenticate, deploy with remote S3 state, and veri
 	$(MAKE) step STEP="10. VERIFY DEPLOYMENT"; \
 	$(MAKE) verify
 
-full-destroy: ## Destroy all infrastructure, state infrastructure, and local artifacts
+e2e-destroy: ## Destroy all infrastructure, state infrastructure, and local artifacts
 	@set -e; \
 	export AUTO="$(AUTO)"; \
 	$(MAKE) step STEP="1. VERIFY TOOLS"; \
