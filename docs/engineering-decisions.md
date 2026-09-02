@@ -250,3 +250,46 @@ The &#11088; symbol represents a responsible architecture addition that is not e
    - As the guidance entrypoint to this project for the user, the README.md should consider all advantages.
    - Take inspiration and conventions from popular repos with nice READMEs.
    - Reference: [awesome-readme GitHub](https://github.com/matiassingers/awesome-readme)
+
+1. **Ensure complete production-worthiness**
+   - Python http.server documentation explicitly states not to use for production.
+   - Therefore, a small refactor into nginx web server with NAT is necessary.
+   - Reference: [python3 http.server](https://docs.python.org/3/library/http.server.html)
+   - A truly resilient multi-AZ production design normally uses a NAT gateway in each AZ that has private workloads requiring egress.
+     - AWS specifically recommends per-AZ NAT gateways for improved resiliency.
+     - Reference: [AWS NAT use cases](https://docs.aws.amazon.com/vpc/latest/userguide/nat-gateway-scenarios.html)
+     - I wouldn't treat this architecure as a fully high availability (HA) production application just to host one HTML page.
+   - I also won't bother with creating a bastion just to prove SSH semantics.
+     - AMI AL2023 comes with SSM agent preinstalled anyway.
+     - With NAT added for Nginx/package egress, the instance can also reach the Systems Manager service endpoints through outbound internet.
+     - Alternatively, SSM can later be made entirely private using VPC endpoints.
+   - ACTUALLY I HAVE THOUGHT ABOUT IT...
+     - Regardless of if I made this change, this architecture is not completely production ready, only production minded, due to several other factors that go beyond the challenge architecture.
+     - See below.
+
+1. **Understand current limitations and simplifications**
+   - The workload uses one EC2 instance, so it is not highly available.
+     - The challenge requires only one instance.
+     - Auto scaling or multiple targets would add scope without much extra value here.
+   - The web server uses Python's built-in `http.server`, which is not intended for production.
+     - Nginx or another production server would be more appropriate.
+     - That would also require package egress, a NAT path, or a prebuilt image.
+   - TLS uses a self-signed certificate.
+     - This directly follows the challenge requirement.
+     - Production would normally use a trusted ACM certificate and real domain.
+   - SSH is allowed from the VPC CIDR because the challenge requires it.
+     - No bastion is added because it creates another host, attack surface, and maintenance burden.
+     - Production access would more likely use Systems Manager Session Manager.
+   - The private instance has no general outbound internet access.
+     - That keeps the design simple and avoids NAT cost.
+     - Real workloads may need NAT, VPC endpoints, or prebuilt images for updates and dependencies.
+   - Remote Terraform state is optional, while bootstrap state stays local.
+     - Making the backend manage its own state creates a circular dependency.
+     - The small bootstrap state is easier to protect separately.
+   - CI performs static validation only.
+     - This avoids storing long-lived AWS credentials in GitHub.
+     - Remote planning or deployment could later use GitHub Actions OIDC.
+   - Observability is intentionally limited.
+     - Production would normally add stronger logging, metrics, alerting, dashboards, and runbooks.
+   - The design is production-minded, not fully production-ready.
+     - Extra resilience and controls should follow real workload needs, not be added only for completeness.
